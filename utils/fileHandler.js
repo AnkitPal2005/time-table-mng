@@ -18,4 +18,7 @@ async function writeJSON(filename, data) {
   }
 }
 
+async (params) => {
+  console.log("hello")
+}
 module.exports = { readJSON, writeJSON };
