@@ -18,6 +18,7 @@ async function login(){
     const data=await response.json();
     if(response.ok){
       alert(data.message);
+      localStorage.setItem('user',JSON.stringify({user:username }))   
       if(role==='admin') window.location.href="views/admin.html";
       else if(role==='teacher') window.location.href=`views/dashboard.html?username=${encodeURIComponent(username)}` ;
     }
