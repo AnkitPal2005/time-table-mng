@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Teacher Dashboard | Schedule Sync</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="header">
+    <h1>Schedule Sync</h1>
+    <div class="user-info">
+      <span>Today<br><span id="current-date"></span><br><span id="current-time"></span></span>
+      <span class="user">Logged in as <strong id="teacher-name">Teacher</strong></span>
+    </div>
+  </header>
+
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <button class="active">📊 Dashboard</button>
+      <button>📅 Calendar</button>
+      <button>📝 ApproveLeave</button>
+      <button>📨 Inbox</button>
+      <span>Current View</span>
+      <button>🤝 Meeting</button>
+      <button>☁ Scheduling</button>
+      <button class="upcoming-btn">Upcoming Event</button>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Card Row -->
+      <div class="card-row">
+        <div class="card card-blue">
+          <h3 id="total-lectures">0</h3>
+          <p>Total Lectures</p>
+        </div>
+        <div class="card card-purple">
+          <h3 id="total-left">0</h3>
+          <p>Total Left</p>
+        </div>
+        <div class="card card-green">
+          <h3 id="total-done">0</h3>
+          <p>Total Done</p>
+        </div>
+      </div>
+
+      <!-- Section 1 -->
+      <section>
+        <h3>Upcoming Adjustments</h3>
+        <div class="section-box" id="upcoming-adjustments">
+          No adjustments scheduled yet.
+        </div>
+      </section>
+
+      <!-- Section 2 -->
+      <section>
+        <h3>Today's Schedules</h3>
+        <div class="section-box" id="todays-schedules">
+          Upcoming soon...
+        </div>
+      </section>
+
+      <!-- Section 3 -->
+      <section>
+        <h3>Adjustment Proposals</h3>
+        <div class="section-box" id="adjustment-proposals">
+          Not scheduled yet.
+        </div>
+      </section>
+    </main>
+  </div>  
+
+  <script src="js/teacher.js"></script>
+</body>
+</html>

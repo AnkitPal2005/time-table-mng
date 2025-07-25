@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Teacher Dashboard | ScheduleSync</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <h1>Schedule Sync</h1>
+      <div class="user-info">
+        <span
+          >Today<br /><span id="current-date"></span><br /><span
+            id="current-time"
+          ></span
+        ></span>
+        <span class="user"
+          >Logged in as <strong id="teacher-name">Teacher</strong></span
+        >
+         <button id="logoutBtn" class="logout-btn">Logout</button>
+      </div>
+    </header>
+
+    <div class="admin-container">
+ 
+      <aside class="sidebar">
+        <button>Dashboard</button>
+        <button>Calendar</button>
+        <button id="approve-leave-btn">Request-Leave</button>
+        <button>Inbox</button>
+        <span>Current View</span>
+        <button class="active">🤝 Meeting</button>
+        <button>☁ Scheduling</button>
+        <button class="upcoming-btn">Upcoming Event</button>
+      </aside>
+
+      
+      <main class="main-content">
+        <h2>Your Time Table</h2>
+        <table class="timetable">
+          <thead>
+            <tr>
+              <th>Days/Time</th>
+              <th>Period 1</th>
+              <th>Period 2</th>
+              <th>Period 3</th>
+              <th>Period 4</th>
+              <th>Period 5</th>
+              <th>Period 6</th>
+              <th>Period 7</th>
+              <th>Period 8</th>
+            </tr>
+          </thead>
+          <tbody id="teacher-timetable"></tbody>
+        </table>
+        
+        <section id="leave-form-section" style="display: none; margin-top: 2rem;">
+          <h2>Request Leave</h2>
+          <form id="leave-Form">
+            <label>From Date:
+              <input type="date" name="from" id="from"/>
+            </label><br /><br />
+            <label>To Date:
+              <input type="date" name="to" id="to"/>
+            </label><br /><br />
+            <label>Reason:
+              <textarea name="reason" rows="4" id="reason"></textarea>
+              </label><br /><br />
+              <button type="submit">Submit Leave Request</button>
+              <button id="cancel">Cancel</button>
+            </form>
+            <p id="leave-success" style="color: green;"></p>
+          </section>
+          
+          
+          
+        </main>
+      </div>
+      <script src="js/teacher.js" defer></script>
+
+  </body>
+</html>

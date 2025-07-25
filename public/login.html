@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login | ScheduleSync</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="login-body">
+  <div class="login-container">
+    <div class="login-left">
+      <h1>Welcome Back!</h1>
+      <p>Login to manage or view your schedule.</p>
+    </div>
+    <div class="login-right">
+      <h2>Login</h2>
+
+      <label>Username</label>
+      <input type="text" id="login-username" placeholder="Enter username" />
+
+      <label>Password</label>
+      <input type="password" id="login-password" placeholder="Enter password" />
+
+      <label>Role</label>
+      <select id="login-role">
+        <option value="admin">Admin</option>
+        <option value="teacher">Teacher</option>
+      </select>
+
+      <button onclick="login()">Login</button>
+
+      <p style="margin-top: 10px;">Not registered? <a href="signup.html">Sign Up</a></p>
+    </div>
+  </div>
+
+  <script src="js/login.js"></script>
+</body>
+</html>

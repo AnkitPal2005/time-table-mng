@@ -1,0 +1,32 @@
+[
+  {
+    "username": "rohan",
+    "password": "123456",
+    "role": "teacher"
+  },
+  {
+    "username": "ankit",
+    "password": "12354",
+    "role": "teacher"
+  },
+  {
+    "username": "kuldep",
+    "password": "123",
+    "role": "teacher"
+  },
+  {
+    "username": "Ankit pal",
+    "password": "123456",
+    "role": "teacher"
+  },
+  {
+    "username": "r@r",
+    "password": "1",
+    "role": "teacher"
+  },
+  {
+    "username": "Ankitpal@2005",
+    "password": "123456",
+    "role": "teacher"
+  }
+]
