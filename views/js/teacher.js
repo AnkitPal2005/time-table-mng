@@ -2,7 +2,12 @@
 console.log("hello ji ankit kya hal hai ")
 const params = new URLSearchParams(window.location.search);
 console.log(window.location.search);
-
+document.getElementById("dashboard-btn").addEventListener("click",()=>{
+  window.location.href = "views/dashboard.html";
+})
+document.getElementById("calender-btn").addEventListener("click",()=>{
+  window.location.href = "/views/teacher.html";
+})
 
 const username = params.get("username");
 console.log(username); // Ankit pal

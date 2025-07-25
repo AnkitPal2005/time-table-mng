@@ -19,7 +19,7 @@ async function login(){
     if(response.ok){
       alert(data.message);
       if(role==='admin') window.location.href="views/admin.html";
-      else if(role==='teacher') window.location.href=`views/teacher.html?username=${encodeURIComponent(username)}` ;
+      else if(role==='teacher') window.location.href=`views/dashboard.html?username=${encodeURIComponent(username)}` ;
     }
       else{
         alert(data.message);

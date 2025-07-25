@@ -17,7 +17,14 @@ router.get("/admin.html", (req, res) => {
   return res.status(401).json({ err: "Aise Kaise Access Karlega Admin Hai Kya" });
 });
 
-router.get("dashbaord.html", () => {});
+router.get("/dashboard.html", (req,res) => {
+  console.log(req.url,"kefnk  ")
+   if (req.session.user.role == "teacher") {
+     return res.sendFile(path.join(__dirname, "../", "/views", "dashboard.html"));
+   }
+
+   return res.status(401).json({ err: "unauthorised" });
+});
 
 router.get("/teacher.html", (req, res, next) => {
   if (req.session.user.role == "teacher") {
