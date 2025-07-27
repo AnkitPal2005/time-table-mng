@@ -8,7 +8,7 @@ async function signup() {
   }
 
   try {
-    const response=await fetch('http://localhost:3000/api/auth/signup', {
+    const response = await fetch("http://localhost:3000/api/auth/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
@@ -20,10 +20,9 @@ async function signup() {
       alert(result.message);
       document.getElementById("signup-username").value = "";
       document.getElementById("signup-password").value = "";
-      window.location.href = "login.html"; 
+      window.location.href = "login.html";
     } else {
       alert(result.message);
-      
     }
   } catch (error) {
     console.error("Error:", error);

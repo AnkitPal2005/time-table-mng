@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const userfile = path.join(__dirname, "../storedData/lectures.json");
+const userfile = path.join(__dirname, "../storedData/lectures.txt");
 const { readJSON, writeJSON } = require("../utils/fileHandler");
 async function addlecture(req, res) {
   try {
@@ -27,7 +27,16 @@ async function addlecture(req, res) {
         .status(400)
         .json({ message: "Lecture already exists for this time" });
     }
-    lectures.push({ day, subject, teacher, room, period, startTime, endTime });
+    lectures.push({
+      day,
+      subject,
+      teacher,
+      room,
+      period,
+      startTime,
+      endTime,
+      isDone: false,
+    });
     console.log(lectures, "lectures hai ", userfile);
     writeJSON(userfile, lectures);
     res.status(201).json({ message: "Lecture added successfully" });
@@ -65,4 +74,27 @@ async function getLectureByTeacher(req, res) {
     return res.status(500).json({ message: "server Error" });
   }
 }
-module.exports = { addlecture, showdata, getLectureByTeacher };
+
+async function clearLecture() {
+  try {
+    const lecture = (await readJSON(userfile)) || [];
+    if (lecture.length == 0) return;
+    for (let i = 0; i < lecture.length; i++) {
+      const endTime = lecture[i].endTime;
+      const now = new Date();
+
+      // Parse endTime as today's date with given time
+      const [endHour, endMinute] = endTime.split(":").map(Number);
+      const endDate = new Date(now);
+      endDate.setHours(endHour, endMinute, 0, 0);
+      if (endDate <= now) {
+        lecture.isDone = true;
+      }
+    }
+    writeJSON(userfile, lecture);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+module.exports = { addlecture, showdata, getLectureByTeacher, clearLecture };

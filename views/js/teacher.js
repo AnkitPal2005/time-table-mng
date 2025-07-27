@@ -1,13 +1,19 @@
 // const { post } = require("../../routes/auth");
-console.log("hello ji ankit kya hal hai ")
+console.log("hello ji ankit kya hal hai ");
 const params = new URLSearchParams(window.location.search);
 console.log(window.location.search);
-document.getElementById("dashboard-btn").addEventListener("click",()=>{
-  window.location.href = "views/dashboard.html";
-})
-document.getElementById("calender-btn").addEventListener("click",()=>{
-  window.location.href = "/views/teacher.html";
-})
+document
+  .querySelector("aside.sidebar button:nth-Child(1)")
+  .addEventListener("click", () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    window.location.href = "/views/dashboard.html?username=" + user.user;
+  });
+document
+  .querySelector("aside.sidebar button:nth-Child(2)")
+  .addEventListener("click", () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    window.location.href = "/views/teacher.html?username=" + user.user;
+  });
 
 const username = params.get("username");
 console.log(username); // Ankit pal
@@ -41,12 +47,13 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
 async function fetcTeachers(req, res) {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/auth/getLectureByTeacher/teacher/${username}`,{
-        credentials:'include'
+      `http://localhost:3000/api/auth/getLectureByTeacher/teacher/${username}`,
+      {
+        credentials: "include",
       }
     );
     const data = await response.json();
-        console.log(data);
+    console.log(data);
 
     return data;
   } catch (err) {
@@ -55,7 +62,7 @@ async function fetcTeachers(req, res) {
 }
 async function renderTeacherTimetable() {
   const lectures = await fetcTeachers();
-  console.log(lectures,"kya hakl hai");
+  console.log(lectures, "kya hakl hai");
   const tbody = document.getElementById("teacher-timetable");
   tbody.innerHTML = "";
 
@@ -80,9 +87,10 @@ async function renderTeacherTimetable() {
         (l) => l.teacher === username && l.day === day && l.period === i
       );
 
-cell.innerHTML = lecture
-  ? `<strong>${lecture.subject}</strong><br>(${lecture.room})<br><small>${lecture.startTime} - ${lecture.endTime}</small>`
-  : "-";      row.appendChild(cell);
+      cell.innerHTML = lecture
+        ? `<strong>${lecture.subject}</strong><br>(${lecture.room})<br><small>${lecture.startTime} - ${lecture.endTime}</small>`
+        : "-";
+      row.appendChild(cell);
     }
 
     tbody.appendChild(row);
@@ -107,18 +115,18 @@ if (leaveForm) {
     e.preventDefault();
 
     // const formData = new FormData(leaveForm);
-    const from=document.getElementById("from").value;
-    const to=document.getElementById("to").value;
+    const from = document.getElementById("from").value;
+    const to = document.getElementById("to").value;
     const reason = document.getElementById("reason").value;
-    if(!from||!to||!reason){
+    if (!from || !to || !reason) {
       alert("Please fill all fields");
-      if(!from) document.getElementById("from").focus();
-      if(!to) document.getElementById("to").focus();
-      if(!reason) document.getElementById("reason").focus();
+      if (!from) document.getElementById("from").focus();
+      if (!to) document.getElementById("to").focus();
+      if (!reason) document.getElementById("reason").focus();
       return;
     }
     const leaveData = {
-      username:username||"unknown",
+      username: username || "unknown",
       from,
       to,
       reason,
@@ -146,9 +154,9 @@ if (leaveForm) {
     }
   });
 }
-document.getElementById("cancel").addEventListener("click",(e)=>{
-  e.preventDefault()
-  document.getElementById("leave-form-section").style.display="none";
-})
+document.getElementById("cancel").addEventListener("click", (e) => {
+  e.preventDefault();
+  document.getElementById("leave-form-section").style.display = "none";
+});
 
 window.onload = renderTeacherTimetable;

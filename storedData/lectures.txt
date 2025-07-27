@@ -1,0 +1,42 @@
+[
+  {
+    "day": "Monday",
+    "subject": "Java",
+    "teacher": "rohan",
+    "room": "12",
+    "period": 1,
+    "startTime": "11:11",
+    "endTime": "12:12",
+    "isDone": false
+  },
+  {
+    "day": "Monday",
+    "subject": "MAths",
+    "teacher": "Ankit pal",
+    "room": "13",
+    "period": 1,
+    "startTime": "00:44",
+    "endTime": "00:46",
+    "isDone": false
+  },
+  {
+    "day": "Tuesday",
+    "subject": "Java",
+    "teacher": "Ankit pal",
+    "room": "13",
+    "period": 1,
+    "startTime": "02:01",
+    "endTime": "02:01",
+    "isDone": false
+  },
+  {
+    "day": "Tuesday",
+    "subject": "Java",
+    "teacher": "Ankit pal",
+    "room": "13",
+    "period": 2,
+    "startTime": "00:58",
+    "endTime": "00:59",
+    "isDone": false
+  }
+]

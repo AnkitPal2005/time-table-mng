@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const userfile = path.join(__dirname, "../storedData/user.json");
+const userfile = path.join(__dirname, "../storedData/user.txt");
 
 const { readJSON, writeJSON } = require("../utils/fileHandler");
 
@@ -13,14 +13,14 @@ async function signupTeacher(req, res) {
       return res.status(400).json({ message: "All fields are required." });
     }
 
-    const users = (await readJSON("storedData/user.json")) || [];
+    const users = (await readJSON("storedData/user.txt")) || [];
 
     if (users.find((u) => u.username === username)) {
       return res.status(400).json({ message: "Username already exists." });
     }
 
     users.push({ username, password, role: "teacher" });
-    writeJSON("storedData/user.json", users);
+    writeJSON("storedData/user.txt", users);
 
     res.status(201).json({ message: "Signup successful! Please login." });
   } catch (err) {
@@ -45,7 +45,7 @@ async function loginUser(req, res) {
       return res.status(400).json({ message: "Invalid Admin Credentials." });
     }
   }
-  const users = await readJSON("storedData/user.json");
+  const users = await readJSON("storedData/user.txt");
   const user = users?.find(
     (u) => u.username === username && u.password === password && u.role === role
   );

@@ -71,7 +71,7 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
     alert(data.message);
 
     if (res.status === 200) {
-      window.location.href = "/login.html"; 
+      window.location.href = "/login.html";
     }
   } catch (err) {
     console.error("Logout failed:", err);
@@ -86,7 +86,7 @@ async function renderTable() {
   const selectedTeacher = document.getElementById("teacherFilter").value;
   // const lectures = JSON.parse(localStorage.getItem("lectures")) || [];
 
-  console.log(selectedTeacher)
+  console.log(selectedTeacher);
   const dayList = [
     "Monday",
     "Tuesday",
@@ -98,7 +98,9 @@ async function renderTable() {
   let lectures = [];
 
   try {
-    const response = await fetch(`http://localhost:3000/api/auth/showLectures/${selectedTeacher}`);
+    const response = await fetch(
+      `http://localhost:3000/api/auth/showLectures/${selectedTeacher}`
+    );
     const data = await response.json();
     if (response.ok) {
       lectures = data;
@@ -122,6 +124,7 @@ async function renderTable() {
       const lecture = lectures.find(
         (l) => l.teacher === selectedTeacher && l.day === day && l.period === i
       );
+      console.log(lecture);
       cell.innerHTML = lecture
         ? `<strong>${lecture.subject}</strong><br>(${lecture.room})<br><small>${lecture.startTime} - ${lecture.endTime}</small>`
         : "-";
@@ -141,11 +144,11 @@ async function loadTeachers() {
   filterDropdown.innerHTML = "";
   formDropdown.innerHTML = "";
   try {
-    const response = await fetch("http://localhost:3000/api/auth/teachers",{
-      credentials:"include"
+    const response = await fetch("http://localhost:3000/api/auth/teachers", {
+      credentials: "include",
     });
     const data = await response.json();
-    console.log("response",data);
+    console.log("response", data);
     const teachers = data.teachers;
     console.log(teachers);
     teachers.forEach((teacher) => {
@@ -160,17 +163,14 @@ async function loadTeachers() {
     });
     renderTable();
   } catch (error) {
-    console.log("error",error);
+    console.log("error", error);
   }
 }
 document
   .getElementById("teacherFilter")
   .addEventListener("change", renderTable);
 
-
-
 window.onload = function () {
   document.getElementById("date-time").innerText = new Date().toLocaleString();
   loadTeachers();
 };
-

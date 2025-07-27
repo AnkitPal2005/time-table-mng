@@ -7,6 +7,7 @@ const { getAllTeachers } = require("./controllers/teachercontroller");
 const teacherRoutes = require("./routes/teacherRoutes");
 const app = express();
 const pagesRouter = require("./routes/pagesRoutes");
+const { clearLecture } = require("./controllers/lecturecontroller");
 
 app.use(
   session({
@@ -26,10 +27,14 @@ app.use(
   })
 );
 app.use(express.json());
-app.use("/",(req,res,next)=>{
-console.log(req.url);
-next();
-} ,express.static(path.join(__dirname, "public")));
+app.use(
+  "/",
+  (req, res, next) => {
+    console.log(req.url);
+    next();
+  },
+  express.static(path.join(__dirname, "public"))
+);
 app.use(
   "/views",
   (req, res, next) => {
@@ -53,6 +58,9 @@ app.use("/", async (req, res) => {
   }
 });
 
+// setInterval(()=>{
+//   clearLecture()
+// },1000)
 app.listen(3000, () => {
   console.log("Server running at http://localhost:3000");
 });

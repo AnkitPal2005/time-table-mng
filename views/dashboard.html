@@ -1,76 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Teacher Dashboard | Schedule Sync</title>
-  <link rel="stylesheet" href="css/style.css" />
-</head>
-<body>
-  <header class="header">
-    <h1>Schedule Sync</h1>
-    <div class="user-info">
-      <span>Today<br><span id="current-date"></span><br><span id="current-time"></span></span>
-      <span class="user">Logged in as <strong id="teacher-name">Teacher</strong></span>
-    </div>
-  </header>
-
-  <div class="admin-container">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <button class="active">📊 Dashboard</button>
-      <button>📅 Calendar</button>
-      <button>📝 ApproveLeave</button>
-      <button>📨 Inbox</button>
-      <span>Current View</span>
-      <button>🤝 Meeting</button>
-      <button>☁ Scheduling</button>
-      <button class="upcoming-btn">Upcoming Event</button>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main-content">
-      <!-- Card Row -->
-      <div class="card-row">
-        <div class="card card-blue">
-          <h3 id="total-lectures">0</h3>
-          <p>Total Lectures</p>
-        </div>
-        <div class="card card-purple">
-          <h3 id="total-left">0</h3>
-          <p>Total Left</p>
-        </div>
-        <div class="card card-green">
-          <h3 id="total-done">0</h3>
-          <p>Total Done</p>
-        </div>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Teacher Dashboard | Schedule Sync</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <h1>Schedule Sync</h1>
+      <div class="user-info">
+        <span
+          >Today<br /><span id="current-date"></span><br /><span
+            id="current-time"
+          ></span
+        ></span>
+        <span class="user"
+          >Logged in as <strong id="teacher-name">Teacher</strong></span
+        >
       </div>
+    </header>
 
-      <!-- Section 1 -->
-      <section>
-        <h3>Upcoming Adjustments</h3>
-        <div class="section-box" id="upcoming-adjustments">
-          No adjustments scheduled yet.
+    <div class="admin-container">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <button id="dashboard-btn">Dashboard</button>
+        <button id="calender-btn">Calendar</button>
+        <button id="approve-leave-btn">Request-Leave</button>
+        <button>Inbox</button>
+        <span>Current View</span>
+        <button class="active">🤝 Meeting</button>
+        <button>☁ Scheduling</button>
+        <button class="upcoming-btn">Upcoming Event</button>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Card Row -->
+        <div class="card-row">
+          <div class="card card-blue">
+            <h3 id="total-lectures">0</h3>
+            <p>Total Lectures</p>
+          </div>
+          <div class="card card-purple">
+            <h3 id="total-left">0</h3>
+            <p>Total Left</p>
+          </div>
+          <div class="card card-green">
+            <h3 id="total-done">0</h3>
+            <p>Total Done</p>
+          </div>
         </div>
-      </section>
 
-      <!-- Section 2 -->
-      <section>
-        <h3>Today's Schedules</h3>
-        <div class="section-box" id="todays-schedules">
-          Upcoming soon...
-        </div>
-      </section>
+        <!-- Section 1 -->
+        <section>
+          <h3>Upcoming Adjustments</h3>
+          <div class="section-box" id="upcoming-adjustments">
+            No adjustments scheduled yet.
+          </div>
+        </section>
 
-      <!-- Section 3 -->
-      <section>
-        <h3>Adjustment Proposals</h3>
-        <div class="section-box" id="adjustment-proposals">
-          Not scheduled yet.
-        </div>
-      </section>
-    </main>
-  </div>  
+        <!-- Section 2 -->
+        <section>
+          <h3>Today's Schedules</h3>
+          <div class="section-box" id="todays-schedules">Upcoming soon...</div>
+        </section>
 
-  <script src="js/dashboard.js"></script>
-</body>
+        <!-- Section 3 -->
+        <section>
+          <h3>Adjustment Proposals</h3>
+          <div class="section-box" id="adjustment-proposals">
+            Not scheduled yet.
+          </div>
+        </section>
+      </main>
+    </div>
+    <section id="leave-form-section" style="display: none; margin-top: 2rem">
+      <h2>Request Leave</h2>
+      <form id="leave-Form">
+        <label
+          >From Date:
+          <input type="date" name="from" id="from" /> </label
+        ><br /><br />
+        <label
+          >To Date:
+          <input type="date" name="to" id="to" /> </label
+        ><br /><br />
+        <label
+          >Reason:
+          <textarea name="reason" rows="4" id="reason"></textarea></label
+        ><br /><br />
+        <button type="submit">Submit Leave Request</button>
+        <button id="cancel">Cancel</button>
+      </form>
+      <p id="leave-success" style="color: green"></p>
+    </section>
+    <script src="js/dashboard.js"></script>
+  </body>
 </html>
