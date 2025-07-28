@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const mongoose=require("mongoose");
 const session = require("express-session");
 const authRoutes = require("./routes/auth");
 const { getAllTeachers } = require("./controllers/teachercontroller");
@@ -8,6 +9,19 @@ const teacherRoutes = require("./routes/teacherRoutes");
 const app = express();
 const pagesRouter = require("./routes/pagesRoutes");
 const { clearLecture } = require("./controllers/lecturecontroller");
+
+
+
+mongoose.connect("mongodb://localhost:27017/timetablesync",{})
+  .then(()=>{
+    console.log("connected to database")
+  })
+  .catch((err)=>{
+    console.error("MongoDb Connection error",err);
+  
+});
+
+
 
 app.use(
   session({
@@ -27,14 +41,7 @@ app.use(
   })
 );
 app.use(express.json());
-app.use(
-  "/",
-  (req, res, next) => {
-    console.log(req.url);
-    next();
-  },
-  express.static(path.join(__dirname, "public"))
-);
+app.use(express.static(path.join(__dirname, "public")));
 app.use(
   "/views",
   (req, res, next) => {

@@ -77,14 +77,17 @@
     <section id="leave-form-section" style="display: none; margin-top: 2rem">
       <h2>Request Leave</h2>
       <form id="leave-Form">
-        <label
-          >From Date:
-          <input type="date" name="from" id="from" /> </label
-        ><br /><br />
-        <label
-          >To Date:
-          <input type="date" name="to" id="to" /> </label
-        ><br /><br />
+        <label>select a day
+              <select class="day-leave-select" >
+                <option value="monday">Monday</option>
+                <option value="tuesday">Tuesday</option>
+                <option value="wednesday">Wednesday</option>
+                <option value="thursday">Thursday</option>
+                <option value="friday">Friday</option>
+                <option value="saturday">Saturday</option>
+              </select>  
+              </label>
+              <br /><br />
         <label
           >Reason:
           <textarea name="reason" rows="4" id="reason"></textarea></label

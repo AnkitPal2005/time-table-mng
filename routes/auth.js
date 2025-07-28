@@ -5,7 +5,7 @@ const { signupTeacher,loginUser,logoutUser } = require("../controllers/authcontr
 const { readJSON, writeJSON } = require("../utils/fileHandler");
 const { getAllTeachers } = require("../controllers/teachercontroller");
 const { addlecture, showdata,getLectureByTeacher } = require("../controllers/lecturecontroller");
-const { requestLeave, readleave } = require("../controllers/leavecontroller");
+const { requestLeave, readleave, adjustLeave,approveLeave, rejectedLeave } = require("../controllers/leavecontroller");
 
 router.post("/signup",signupTeacher);
 router.post("/login",loginUser);
@@ -16,7 +16,11 @@ router.get("/getLectureByTeacher/teacher/:username",getLectureByTeacher);
 // Logout API
 router.post('/logout', logoutUser);
 router.post('/request',requestLeave);
-router.get('/readleave',readleave)
+router.post('/getlecturesleave', adjustLeave); 
+router.post('/approveleave', approveLeave); 
+router.post('/reject',rejectedLeave)
+router.get('/leave',readleave)
+
 module.exports = router;
 
 

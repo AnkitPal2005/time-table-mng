@@ -115,20 +115,18 @@ if (leaveForm) {
     e.preventDefault();
 
     // const formData = new FormData(leaveForm);
-    const from = document.getElementById("from").value;
-    const to = document.getElementById("to").value;
+    const day = document.querySelector(".day-leave-select").value;
     const reason = document.getElementById("reason").value;
-    if (!from || !to || !reason) {
+    if (!day || !reason) {
       alert("Please fill all fields");
-      if (!from) document.getElementById("from").focus();
-      if (!to) document.getElementById("to").focus();
+      if (!day) document.querySelector
+      (".day-leave-select").focus();
       if (!reason) document.getElementById("reason").focus();
       return;
     }
     const leaveData = {
       username: username || "unknown",
-      from,
-      to,
+      day,
       reason,
     };
 
@@ -157,6 +155,7 @@ if (leaveForm) {
 document.getElementById("cancel").addEventListener("click", (e) => {
   e.preventDefault();
   document.getElementById("leave-form-section").style.display = "none";
+  document.getElementById(leave-success).style.innerHTML="";
 });
 
 window.onload = renderTeacherTimetable;
