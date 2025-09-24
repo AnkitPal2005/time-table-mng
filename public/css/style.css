@@ -372,3 +372,141 @@ section h3 {
 #leave-Form button:hover {
     background-color: #04b58a;
 }
+/* ========= Forgot Password Page ========= */
+.forgot-body {
+    background: linear-gradient(to right, #fffce9, #cfe0ff);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.forgot-container {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    width: 350px;
+    text-align: center;
+}
+
+.forgot-container h2 {
+    font-size: 24px;
+    color: #8e2de2;
+    margin-bottom: 20px;
+}
+
+.forgot-container label {
+    display: block;
+    text-align: left;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+.forgot-container input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.forgot-container button {
+    width: 100%;
+    padding: 10px;
+    background: #8e2de2;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.forgot-container button:hover {
+    background: #7320c9;
+}
+
+.forgot-container #message {
+    margin-top: 12px;
+    font-size: 14px;
+    color: #d9534f;
+}
+.forgot-btn {
+    background: none;
+    border: none;
+    color: #8e2de2;
+    cursor: pointer;
+    margin-top: 10px;
+    text-decoration: underline;
+    font-size: 14px;
+}
+
+
+/* Reset Password Page Styles */
+.reset-form {
+    max-width: 400px;
+    margin: 40px auto;
+    background: white;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.reset-form h2 {
+    text-align: center;
+    color: #8e2de2;
+    margin-bottom: 15px;
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.reset-form .sub-text {
+    text-align: center;
+    color: #555;
+    margin-bottom: 25px;
+    font-size: 15px;
+}
+
+.reset-form .input-group {
+    margin-bottom: 20px;
+}
+
+.reset-form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+.reset-form input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 16px;
+    border: 1.5px solid #ccc;
+    border-radius: 8px;
+    transition: border-color 0.3s ease;
+}
+
+.reset-form input[type="password"]:focus {
+    border-color: #8e2de2;
+    outline: none;
+}
+
+.reset-form .btn {
+    width: 100%;
+    padding: 14px;
+    background-color: #8e2de2;
+    color: white;
+    font-weight: 700;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.reset-form .btn:hover {
+    background-color: #7320c9;
+}

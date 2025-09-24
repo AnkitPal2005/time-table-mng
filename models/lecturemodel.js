@@ -28,7 +28,7 @@ const lectureSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  isdone: {
+  isDone: {
     type: Boolean,
     default: false,
   },

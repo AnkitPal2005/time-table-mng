@@ -12,27 +12,44 @@ document.getElementById("current-time").innerText = new Date(
   now
 ).toLocaleTimeString();
 const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
-console.log(user.userr);
+console.log(user.user);
 
-fetch(`/api/teacher/teacher/${user.user}`)
-  .then((res) => res.json())
-  .then((data) => {
-    const lectures = data.responseData.lectures || [];
-    const todayLectures = lectures.filter((l) => l.day === today);
-    document.getElementById("total-lectures").innerText =
-      data.responseData.metadata.totalLectures;
-    document.getElementById("total-left").innerText =
-      data.responseData.metadata.totalLeft;
-    document.getElementById("total-done").innerText =
-      data.responseData.metadata.totalDone;
-  })
-  .catch((err) => {
-    console.error("Error Loading DashBoard", err);
-  });
+// fetch(`/api/teacher/teacher/${user.user}`)
+//   .then((res) => res.json())
+//   .then((data) => {
+//     const lectures = data.responseData.lectures || [];
+//     const todayLectures = lectures.filter((l) => l.day === today);
+//     document.getElementById("total-lectures").innerText =
+//       data.responseData.metadata.totalLectures;
+//     document.getElementById("total-left").innerText =
+//       data.responseData.metadata.totalLeft;
+//     document.getElementById("total-done").innerText =
+//       data.responseData.metadata.totalDone;
+//   })
+//   .catch((err) => {
+//     console.error("Error Loading DashBoard", err);
+//   });
+async function loadTeacherSummary() {
+  try {
+    const res = await fetch(
+      `http://localhost:3000/api/auth/teacherLectureSummary/${user.user}`
+    );
+    const data = await res.json();
+    document.getElementById("total-lectures").innerText = data.total || 0;
+    document.getElementById("total-done").innerText = data.done || 0;
+    document.getElementById("total-left").innerText = data.pending || 0;
+  } catch (error) {
+    document.getElementById("total-lectures").innerText = "0";
+    document.getElementById("total-done").innerText = "0";
+    document.getElementById("total-left").innerText = "0";
+  }
+}
 document
   .querySelector("aside.sidebar button:nth-Child(2)")
   .addEventListener("click", () => {
-    window.location.href = "/views/teacher.html?username=" + user.user;
+    // window.location.href = "/views/teacher.html?username=" + user.user;
+        window.location.href = "/views/teacher.html";
+
   });
 const approveLeaveBtn = Array.from(document.querySelectorAll("button")).find(
   (btn) => btn.textContent.trim() === "Request-Leave"
@@ -60,7 +77,7 @@ if (leaveForm) {
       return;
     }
     const leaveData = {
-      username: username || "unknown",
+      username: user.user || "unknown",
       day,
       reason,
     };
@@ -86,6 +103,10 @@ if (leaveForm) {
       console.error("Error submitting leave:", error);
     }
   });
+}
+
+window.onload=function(){
+  loadTeacherSummary();
 }
   document.getElementById("cancel").addEventListener("click", (e) => {
     e.preventDefault();
