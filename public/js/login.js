@@ -21,9 +21,11 @@ async function login() {
       localStorage.setItem("user", JSON.stringify({ user: username }));
       if (role === "admin") window.location.href = "views/admin.html";
       else if (role === "teacher")
-        window.location.href = `views/dashboard.html?username=${encodeURIComponent(
-          username
-        )}`;
+        // window.location.href = `views/dashboard.html?username=${encodeURIComponent(
+        //   username
+        // )}`;
+                window.location.href = `views/dashboard.html`
+
     } else {
       alert(data.message);
     }
@@ -32,3 +34,7 @@ async function login() {
     alert("something went wrong");
   }
 }
+document.getElementById("forgot-password-btn").addEventListener("click",()=>{
+  window.location.href = "forgotpassword.html";
+})
+
