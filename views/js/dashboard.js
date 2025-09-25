@@ -32,7 +32,7 @@ console.log(user.user);
 async function loadTeacherSummary() {
   try {
     const res = await fetch(
-      `http://localhost:3000/api/auth/teacherLectureSummary/${user.user}`
+      `/api/auth/teacherLectureSummary/${user.user}`
     );
     const data = await res.json();
     document.getElementById("total-lectures").innerText = data.total || 0;
@@ -83,7 +83,7 @@ if (leaveForm) {
     };
 
     try {
-      const res = await fetch("http://localhost:3000/api/auth/request", {
+      const res = await fetch("/api/auth/request", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
