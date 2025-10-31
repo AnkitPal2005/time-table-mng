@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const path=require("path");
-const { signupTeacher,loginUser,logoutUser } = require("../controllers/authcontroller");
-const { readJSON, writeJSON } = require("../utils/fileHandler");
+const { signupTeacher, loginUser, logoutUser } = require("../controllers/authcontroller");
 const { getAllTeachers } = require("../controllers/teachercontroller");
 const {
   addlecture,
@@ -12,7 +10,7 @@ const {
   getassignedteacher,
   assignLecture,
 } = require("../controllers/lecturecontroller");
-const { requestLeave, readleave, adjustLeave,approveLeave, rejectedLeave } = require("../controllers/leavecontroller");
+const { requestLeave, readleave, adjustLeave, approveLeave, rejectedLeave, deleteLeave } = require("../controllers/leavecontroller");
 
 router.post("/signup",signupTeacher);
 router.post("/login",loginUser);
@@ -26,6 +24,7 @@ router.post('/request',requestLeave);
 router.post('/getlecturesleave', adjustLeave); 
 router.post('/approveleave', approveLeave); 
 router.post('/reject',rejectedLeave)
+router.post('/deleteleave', deleteLeave)
 router.get('/leave',readleave);
 router.get("/teacherLectureSummary/:username",getTeacherLectureSummary)
 router.post("/assignteacher", getassignedteacher);

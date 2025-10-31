@@ -1,18 +1,49 @@
-const params = new URLSearchParams(window.location.search);
-const username = params.get("username");
-const user = JSON.parse(localStorage.getItem("user")) || {
-  username: "Teacher",
-};
-document.getElementById("teacher-name").innerText = `${user.user}(Teacher)`;
-const now = new Date();
-document.getElementById("current-date").innerText = `${now.getDate()}/${
-  now.getMonth() + 1
-}/${now.getFullYear()}`;
-document.getElementById("current-time").innerText = new Date(
-  now
-).toLocaleTimeString();
+// Check session and get user info
+async function checkSession() {
+  try {
+    const response = await fetch('/api/getsession', {
+      credentials: 'include'
+    });
+    
+    if (!response.ok) {
+      // Redirect to login if no session
+      window.location.href = '/login.html';
+      return null;
+    }
+    
+    const sessionData = await response.json();
+    return sessionData;
+  } catch (error) {
+    console.error('Session check failed:', error);
+    window.location.href = '/login.html';
+    return null;
+  }
+}
+
+// Initialize dashboard
+async function initDashboard() {
+  const sessionUser = await checkSession();
+  if (!sessionUser) return;
+  
+  // Update UI with user info
+  document.getElementById("teacher-name").innerText = sessionUser.username;
+  
+  // Update date and time
+  const now = new Date();
+  document.getElementById("current-date").innerText = now.toLocaleDateString();
+  document.getElementById("current-time").innerText = now.toLocaleTimeString();
+  
+  // Update time every second
+  setInterval(() => {
+    const currentTime = new Date();
+    document.getElementById("current-time").innerText = currentTime.toLocaleTimeString();
+  }, 1000);
+  
+  // Load teacher summary
+  loadTeacherSummary(sessionUser.username);
+}
+
 const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
-console.log(user.user);
 
 // fetch(`/api/teacher/teacher/${user.user}`)
 //   .then((res) => res.json())
@@ -29,16 +60,22 @@ console.log(user.user);
 //   .catch((err) => {
 //     console.error("Error Loading DashBoard", err);
 //   });
-async function loadTeacherSummary() {
+async function loadTeacherSummary(username) {
   try {
-    const res = await fetch(
-      `/api/auth/teacherLectureSummary/${user.user}`
-    );
-    const data = await res.json();
-    document.getElementById("total-lectures").innerText = data.total || 0;
-    document.getElementById("total-done").innerText = data.done || 0;
-    document.getElementById("total-left").innerText = data.pending || 0;
+    const res = await fetch(`/api/auth/teacherLectureSummary/${username}`, {
+      credentials: 'include'
+    });
+    
+    if (res.ok) {
+      const data = await res.json();
+      document.getElementById("total-lectures").innerText = data.total || 0;
+      document.getElementById("total-done").innerText = data.done || 0;
+      document.getElementById("total-left").innerText = data.pending || 0;
+    } else {
+      throw new Error('Failed to load summary');
+    }
   } catch (error) {
+    console.error('Error loading teacher summary:', error);
     document.getElementById("total-lectures").innerText = "0";
     document.getElementById("total-done").innerText = "0";
     document.getElementById("total-left").innerText = "0";
@@ -105,9 +142,28 @@ if (leaveForm) {
   });
 }
 
-window.onload=function(){
-  loadTeacherSummary();
-}
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', function() {
+  initDashboard();
+});
+
+// Add logout functionality
+document.getElementById('logout-btn').addEventListener('click', async function() {
+  try {
+    const response = await fetch('/api/auth/logout', {
+      method: 'POST',
+      credentials: 'include'
+    });
+    
+    if (response.ok) {
+      localStorage.removeItem('user');
+      window.location.href = '/login.html';
+    }
+  } catch (error) {
+    console.error('Logout error:', error);
+    window.location.href = '/login.html';
+  }
+});
   document.getElementById("cancel").addEventListener("click", (e) => {
     e.preventDefault();
     document.getElementById("leave-form-section").style.display = "none";

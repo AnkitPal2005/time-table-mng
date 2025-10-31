@@ -169,12 +169,6 @@
 //   approveLeave,
 //   rejectedLeave,
 // };
-const fs = require("fs");
-const path = require("path");
-const userfile = path.join(__dirname, "../storedData/leave.txt");
-const lecturesFile = path.join(__dirname, "../storedData/lectures.txt");
-
-const { readJSON, writeJSON } = require("../utils/fileHandler");
 const leavemodel = require("../models/leavemodel");
 const lecturemodel = require("../models/lecturemodel");
 const usermodel = require("../models/usermodel");
@@ -279,10 +273,30 @@ async function rejectedLeave(req, res) {
     res.status(500).json({ message: "Error reject leave" });
   }
 }
+
+async function deleteLeave(req, res) {
+  try {
+    const { username, day } = req.body;
+    const deletedLeave = await leavemodel.findOneAndDelete({
+      teacher: username,
+      day: day
+    });
+    
+    if (!deletedLeave) {
+      return res.status(404).json({ message: "Leave request not found" });
+    }
+    
+    res.status(200).json({ message: "Leave request deleted successfully" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Error deleting leave request" });
+  }
+}
 module.exports = {
   requestLeave,
   readleave,
   adjustLeave,
   approveLeave,
   rejectedLeave,
+  deleteLeave,
 };

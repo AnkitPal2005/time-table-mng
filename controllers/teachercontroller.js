@@ -22,10 +22,7 @@
 //   }
 // }
 // module.exports = { getAllTeachers };
-const path = require("path");
-const { readJSON } = require("../utils/fileHandler");
 const usermodel = require("../models/usermodel");
-const userpath = path.join(__dirname, "../storedData/user.txt");
 async function getAllTeachers(req, res) {
   try {
     // const data = (await readJSON(userpath)) || [];

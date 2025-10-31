@@ -110,13 +110,8 @@
 // }
 
 // module.exports = { addlecture, showdata, getLectureByTeacher, clearLecture };
-const fs = require("fs");
-const path = require("path");
-const userfile = path.join(__dirname, "../storedData/lectures.txt");
-const { readJSON, writeJSON } = require("../utils/fileHandler");
 const lecturemodel = require("../models/lecturemodel");
 const usermodel = require("../models/usermodel");
-const { error } = require("console");
 async function addlecture(req, res) {
   try {
     const { teacher, subject, room, day, period, startTime, endTime } =

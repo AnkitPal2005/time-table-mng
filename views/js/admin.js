@@ -317,12 +317,57 @@ document
   .getElementById("teacherFilter")
   .addEventListener("change", renderTable);
 
-window.onload = function () {
+// Check session and initialize admin panel
+async function checkAdminSession() {
+  try {
+    const response = await fetch('/api/getsession', {
+      credentials: 'include'
+    });
+    
+    if (!response.ok) {
+      window.location.href = '/login.html';
+      return false;
+    }
+    
+    const sessionData = await response.json();
+    if (sessionData.role !== 'admin') {
+      alert('Access denied. Admin privileges required.');
+      window.location.href = '/login.html';
+      return false;
+    }
+    
+    return true;
+  } catch (error) {
+    console.error('Session check failed:', error);
+    window.location.href = '/login.html';
+    return false;
+  }
+}
+
+// Initialize admin panel
+async function initAdmin() {
+  const isAdmin = await checkAdminSession();
+  if (!isAdmin) return;
+  
+  // Update date and time
   const dt = document.getElementById("date-time");
-  if (dt) dt.innerText = new Date().toLocaleString();
+  if (dt) {
+    const updateDateTime = () => {
+      dt.innerText = new Date().toLocaleString();
+    };
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+  }
+  
+  // Load initial data
   loadTeachers();
   loadleaverequests();
-};
+}
+
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', function() {
+  initAdmin();
+});
 
 document.getElementById("show-leave-btn").addEventListener("click", () => {
   const leaveSection = document.getElementById("leave-requests-section");

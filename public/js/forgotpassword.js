@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded",()=>{
         e.preventDefault();
         const email=document.getElementById("email").value.trim();
         try{
-            const res=await fetch("/send-otp",{
+            const res=await fetch("/otp/send-otp",{
                 method:"POST",
                 headers:{"Content-Type":"application/json"},
                 body:JSON.stringify({email})
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded",()=>{
         const email=document.getElementById("email").value.trim();
         const otp=document.getElementById("otp").value.trim();
         try{
-            const res=await fetch("/verify-otp",{
+            const res=await fetch("/otp/verify-otp",{
                 method:"POST",
                 headers:{"Content-Type":"application/json"},
                 body:JSON.stringify({email,otp})

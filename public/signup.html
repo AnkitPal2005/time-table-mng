@@ -1,30 +1,398 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Teacher Signup | ScheduleSync</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* Optimized CSS - inline for faster loading */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    :root {
+      --primary-color: #6366f1;
+      --secondary-color: #8b5cf6;
+      --text-primary: #1f2937;
+      --text-secondary: #6b7280;
+      --bg-primary: #ffffff;
+      --border-color: #e5e7eb;
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+      --radius-lg: 0.75rem;
+    }
+
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .signup-container {
+      display: flex;
+      width: 100%;
+      max-width: 900px;
+      min-height: 500px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      background: var(--bg-primary);
+    }
+
+    .signup-left {
+      width: 50%;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem;
+      position: relative;
+    }
+
+    .signup-left h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .signup-left p {
+      text-align: center;
+      font-size: 1.125rem;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+
+    .features {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 0.875rem;
+    }
+
+    .feature-icon {
+      font-size: 1.25rem;
+    }
+
+    .signup-right {
+      width: 50%;
+      background: var(--bg-primary);
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .signup-right h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      text-align: center;
+      color: var(--text-primary);
+    }
+
+    .signup-subtitle {
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      font-size: 0.875rem;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      font-size: 0.875rem;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      font-size: 1rem;
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      transition: all 0.2s ease;
+      background: var(--bg-primary);
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgb(99 102 241 / 0.1);
+    }
+
+    .signup-btn {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      border: none;
+      font-weight: 600;
+      font-size: 1rem;
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .signup-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .signup-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .form-footer {
+      margin-top: 1.5rem;
+      text-align: center;
+    }
+
+    .signin-link {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .signin-link a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .signin-link a:hover {
+      text-decoration: underline;
+    }
+
+    .message {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: var(--radius-lg);
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-align: center;
+      display: none;
+    }
+
+    .message.success {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      display: block;
+    }
+
+    .message.error {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .signup-container {
+        flex-direction: column;
+        max-width: 400px;
+      }
+      
+      .signup-left,
+      .signup-right {
+        width: 100%;
+      }
+      
+      .signup-left {
+        padding: 2rem;
+      }
+      
+      .signup-left h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
 </head>
-<body class="login-body">
-  <div class="login-container">
-    <div class="login-left">
-      <h1>Create Teacher Account</h1>
-      <p>Register as a Teacher to access your timetable.</p>
+<body>
+  <div class="signup-container">
+    <div class="signup-left">
+      <div class="signup-left-content">
+        <h1>Join ScheduleSync</h1>
+        <p>Create your teacher account to access our comprehensive scheduling platform and manage your timetable efficiently.</p>
+        <div class="features">
+          <div class="feature">
+            <span class="feature-icon">🎓</span>
+            <span>Teacher Dashboard</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">📋</span>
+            <span>Leave Management</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">🔔</span>
+            <span>Real-time Updates</span>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="login-right">
-      <h2>Sign Up (Teacher)</h2>
-      <label>Email</label>
-      <input type="text" id="signup-username" placeholder="Enter Email" />
+    <div class="signup-right">
+      <div class="signup-form">
+        <h2>Create Account</h2>
+        <p class="signup-subtitle">Fill in your details to get started</p>
 
-      <label>Password</label>
-      <input type="password" id="signup-password" placeholder="Enter password" />
+        <div class="form-group">
+          <label for="signup-username">Email Address</label>
+          <input type="email" id="signup-username" placeholder="Enter your email address" required />
+        </div>
 
-      <button onclick="signup()">Sign Up</button>
+        <div class="form-group">
+          <label for="signup-password">Password</label>
+          <input type="password" id="signup-password" placeholder="Create a strong password" required />
+        </div>
 
-      <p style="margin-top: 10px;">Already have an account? <a href="login.html">Login</a></p>
+        <div class="form-group">
+          <label for="confirm-password">Confirm Password</label>
+          <input type="password" id="confirm-password" placeholder="Confirm your password" required />
+        </div>
+
+        <button type="button" onclick="signup()" class="signup-btn" id="signup-button">
+          Create Account
+        </button>
+
+        <div id="message" class="message"></div>
+
+        <div class="form-footer">
+          <p class="signin-link">
+            Already have an account? <a href="/">Sign in here</a>
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 
-  <script src="js/signup.js"></script>
+  <script>
+    function showMessage(message, type) {
+      const messageDiv = document.getElementById('message');
+      messageDiv.textContent = message;
+      messageDiv.className = `message ${type}`;
+      messageDiv.style.display = 'block';
+      
+      if (type === 'success') {
+        setTimeout(() => {
+          messageDiv.style.display = 'none';
+        }, 3000);
+      }
+    }
+
+    function validateSignupForm() {
+      const username = document.getElementById("signup-username").value.trim();
+      const password = document.getElementById("signup-password").value.trim();
+      const confirmPassword = document.getElementById("confirm-password").value.trim();
+      
+      if (!username) {
+        showMessage("Please enter your email address", "error");
+        return false;
+      }
+      
+      if (!password) {
+        showMessage("Please enter a password", "error");
+        return false;
+      }
+      
+      if (!confirmPassword) {
+        showMessage("Please confirm your password", "error");
+        return false;
+      }
+      
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(username)) {
+        showMessage("Please enter a valid email address", "error");
+        return false;
+      }
+      
+      // Password validation
+      if (password.length < 6) {
+        showMessage("Password must be at least 6 characters long", "error");
+        return false;
+      }
+      
+      // Password confirmation
+      if (password !== confirmPassword) {
+        showMessage("Passwords do not match", "error");
+        return false;
+      }
+      
+      return true;
+    }
+
+    async function signup() {
+      if (!validateSignupForm()) return;
+      
+      const username = document.getElementById("signup-username").value.trim();
+      const password = document.getElementById("signup-password").value.trim();
+      const button = document.getElementById("signup-button");
+      
+      button.disabled = true;
+      button.textContent = 'Creating account...';
+
+      try {
+        const response = await fetch("/api/auth/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          showMessage(result.message, "success");
+          document.getElementById("signup-username").value = "";
+          document.getElementById("signup-password").value = "";
+          document.getElementById("confirm-password").value = "";
+          
+          // Redirect after success
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 2000);
+        } else {
+          showMessage(result.message, "error");
+        }
+      } catch (error) {
+        console.error("Signup Error:", error);
+        showMessage("Connection error. Please try again.", "error");
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Create Account';
+      }
+    }
+
+    // Enhanced event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+      // Enter key support
+      document.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          signup();
+        }
+      });
+    });
+  </script>
 </body>
 </html>

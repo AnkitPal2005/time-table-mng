@@ -2,101 +2,1119 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Teacher Dashboard | Schedule Sync</title>
-    <link rel="stylesheet" href="css/style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teacher Dashboard | ScheduleSync</title>
+    <style>
+      /* Modern Teacher Dashboard CSS */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      }
+
+      :root {
+        --primary-color: #6366f1;
+        --secondary-color: #8b5cf6;
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --danger-color: #ef4444;
+        --text-primary: #1f2937;
+        --text-secondary: #6b7280;
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8fafc;
+        --bg-tertiary: #f1f5f9;
+        --border-color: #e5e7eb;
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+        --radius-md: 0.5rem;
+        --radius-lg: 0.75rem;
+        --radius-xl: 1rem;
+      }
+
+      body {
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        color: var(--text-primary);
+        line-height: 1.6;
+        min-height: 100vh;
+      }
+
+      /* Header */
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--bg-primary);
+        padding: 1rem 2rem;
+        box-shadow: var(--shadow-md);
+        border-bottom: 1px solid var(--border-color);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .header h1 {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-size: 1.75rem;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+      }
+
+      .date-time-info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.25rem;
+      }
+
+      .current-time {
+        font-weight: 600;
+        color: var(--primary-color);
+      }
+
+      .user {
+        padding: 0.5rem 1rem;
+        background: var(--bg-tertiary);
+        border-radius: var(--radius-lg);
+        font-weight: 500;
+      }
+
+      .logout-btn {
+        padding: 0.5rem 1rem;
+        background: linear-gradient(135deg, var(--danger-color), #dc2626);
+        color: white;
+        border: none;
+        border-radius: var(--radius-lg);
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.875rem;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.2s ease;
+      }
+
+      .logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+      }
+
+      /* Admin Container */
+      .admin-container {
+        display: flex;
+        height: calc(100vh - 70px);
+      }
+
+      /* Sidebar */
+      .sidebar {
+        width: 280px;
+        background: var(--bg-primary);
+        border-right: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        padding: 1.5rem;
+        gap: 0.5rem;
+        box-shadow: var(--shadow-sm);
+        overflow-y: auto;
+      }
+
+      .sidebar button {
+        padding: 0.875rem 1rem;
+        background: none;
+        border: none;
+        text-align: left;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        border-radius: var(--radius-lg);
+        transition: all 0.2s ease;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .sidebar button:hover {
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+        transform: translateX(4px);
+      }
+
+      .sidebar button.active {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        font-weight: 600;
+        box-shadow: var(--shadow-md);
+      }
+
+      .sidebar .icon {
+        font-size: 1.125rem;
+      }
+
+      .sidebar span {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin: 1rem 0 0.5rem 0;
+        padding: 0 1rem;
+      }
+
+      /* Main Content */
+      .main-content {
+        flex: 1;
+        padding: 2rem;
+        background: var(--bg-secondary);
+        overflow-y: auto;
+      }
+
+      /* Stats Cards */
+      .card-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .card {
+        background: var(--bg-primary);
+        padding: 2rem;
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow-lg);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: 1px solid var(--border-color);
+      }
+
+      .card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      }
+
+      .card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-xl);
+      }
+
+      .card h3 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .card p {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .card-blue::before {
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      }
+
+      .card-blue h3 {
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .card-purple::before {
+        background: linear-gradient(135deg, var(--secondary-color), #7c3aed);
+      }
+
+      .card-purple h3 {
+        background: linear-gradient(135deg, var(--secondary-color), #7c3aed);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .card-green::before {
+        background: linear-gradient(135deg, var(--success-color), #059669);
+      }
+
+      .card-green h3 {
+        background: linear-gradient(135deg, var(--success-color), #059669);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      /* Content Sections */
+      .content-section {
+        background: var(--bg-primary);
+        border-radius: var(--radius-xl);
+        padding: 2rem;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border-color);
+        margin-bottom: 2rem;
+        display: none;
+      }
+
+      .content-section.active {
+        display: block;
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+
+      .section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        position: relative;
+        padding-left: 1rem;
+      }
+
+      .section-title::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 4px;
+        height: 1.5rem;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border-radius: var(--radius-sm);
+      }
+
+      /* Buttons */
+      .btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: var(--radius-lg);
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.875rem;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        box-shadow: var(--shadow-md);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .btn-success {
+        background: linear-gradient(135deg, var(--success-color), #059669);
+        color: white;
+        box-shadow: var(--shadow-md);
+      }
+
+      .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .btn-warning {
+        background: linear-gradient(135deg, var(--warning-color), #d97706);
+        color: white;
+        box-shadow: var(--shadow-md);
+      }
+
+      .btn-warning:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .btn-danger {
+        background: linear-gradient(135deg, var(--danger-color), #dc2626);
+        color: white;
+        box-shadow: var(--shadow-md);
+      }
+
+      .btn-danger:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      /* Forms */
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        font-size: 0.875rem;
+      }
+
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 0.875rem 1rem;
+        border: 2px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        font-size: 1rem;
+        transition: all 0.2s ease;
+        background: var(--bg-primary);
+      }
+
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgb(99 102 241 / 0.1);
+      }
+
+      .form-group textarea {
+        min-height: 120px;
+        resize: vertical;
+      }
+
+      /* Section Boxes */
+      .section-box {
+        background: var(--bg-secondary);
+        border-radius: var(--radius-xl);
+        padding: 1.5rem;
+        font-size: 0.875rem;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-color);
+        transition: all 0.2s ease;
+        color: var(--text-secondary);
+        min-height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .section-box:hover {
+        box-shadow: var(--shadow-lg);
+        transform: translateY(-2px);
+      }
+
+      /* Leave Form */
+      .leave-form-container {
+        background: var(--bg-primary);
+        border-radius: var(--radius-xl);
+        padding: 2rem;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border-color);
+        margin-top: 2rem;
+        display: none;
+      }
+
+      .leave-form-container.active {
+        display: block;
+      }
+
+      .leave-form-container h2 {
+        color: var(--text-primary);
+        margin-bottom: 1.5rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+        text-align: center;
+      }
+
+      /* Message */
+      .message {
+        padding: 1rem;
+        border-radius: var(--radius-lg);
+        margin-bottom: 1rem;
+        font-weight: 500;
+        display: none;
+      }
+
+      .message.success {
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--success-color);
+        border: 1px solid rgba(16, 185, 129, 0.2);
+        display: block;
+      }
+
+      .message.error {
+        background: rgba(239, 68, 68, 0.1);
+        color: var(--danger-color);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        display: block;
+      }
+
+      .message.info {
+        background: rgba(59, 130, 246, 0.1);
+        color: #3b82f6;
+        border: 1px solid rgba(59, 130, 246, 0.2);
+        display: block;
+      }
+
+      /* Schedule Items */
+      .schedule-item {
+        background: var(--bg-secondary);
+        border-radius: var(--radius-lg);
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border: 1px solid var(--border-color);
+        transition: all 0.2s ease;
+        border-left: 4px solid var(--primary-color);
+      }
+
+      .schedule-item:hover {
+        box-shadow: var(--shadow-md);
+        transform: translateY(-2px);
+      }
+
+      .schedule-time {
+        font-weight: 600;
+        color: var(--primary-color);
+        font-size: 0.875rem;
+      }
+
+      .schedule-subject {
+        font-weight: 600;
+        color: var(--text-primary);
+        margin: 0.25rem 0;
+      }
+
+      .schedule-room {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+      }
+
+      /* Responsive */
+      @media (max-width: 1024px) {
+        .admin-container {
+          flex-direction: column;
+        }
+        
+        .sidebar {
+          width: 100%;
+          flex-direction: row;
+          overflow-x: auto;
+          padding: 1rem;
+        }
+        
+        .sidebar button {
+          white-space: nowrap;
+          min-width: 120px;
+        }
+        
+        .main-content {
+          padding: 1.5rem;
+        }
+        
+        .card-row {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .header {
+          padding: 1rem;
+          flex-direction: column;
+          gap: 1rem;
+        }
+        
+        .user-info {
+          flex-direction: column;
+          text-align: center;
+          gap: 0.5rem;
+        }
+        
+        .main-content {
+          padding: 1rem;
+        }
+      }
+    </style>
   </head>
   <body>
     <header class="header">
-      <h1>Schedule Sync</h1>
+      <h1>📅 ScheduleSync Teacher</h1>
       <div class="user-info">
-        <span
-          >Today<br /><span id="current-date"></span><br /><span
-            id="current-time"
-          ></span
-        ></span>
-        <span class="user"
-          >Logged in as <strong id="teacher-name">Teacher</strong></span
-        >
+        <div class="date-time-info">
+          <span class="date-label">Today</span>
+          <span id="current-date" class="current-date"></span>
+          <span id="current-time" class="current-time"></span>
+        </div>
+        <div class="user">
+          <span class="user-label">Welcome,</span>
+          <strong id="teacher-name">Teacher</strong>
+        </div>
+        <button id="logout-btn" class="logout-btn">Sign Out</button>
       </div>
     </header>
 
     <div class="admin-container">
-      <!-- Sidebar -->
       <aside class="sidebar">
-        <button id="dashboard-btn">Dashboard</button>
-        <button id="calender-btn">Calendar</button>
-        <button id="approve-leave-btn">Request-Leave</button>
-        <button>Inbox</button>
-        <span>Current View</span>
-        <button class="active">🤝 Meeting</button>
-        <button>☁ Scheduling</button>
-        <button class="upcoming-btn">Upcoming Event</button>
+        <button class="active" onclick="showSection('dashboard')">
+          <span class="icon">📊</span>
+          Dashboard
+        </button>
+        <button onclick="showSection('schedule')">
+          <span class="icon">📅</span>
+          My Schedule
+        </button>
+        <button onclick="showSection('leave-request')">
+          <span class="icon">📝</span>
+          Request Leave
+        </button>
+        <button onclick="showSection('attendance')">
+          <span class="icon">✅</span>
+          Attendance
+        </button>
+        
+        <span>Quick Actions</span>
+        
+        <button onclick="showSection('profile')">
+          <span class="icon">👤</span>
+          Profile
+        </button>
+        <button onclick="showSection('notifications')">
+          <span class="icon">🔔</span>
+          Notifications
+        </button>
+        <button onclick="showSection('help')">
+          <span class="icon">❓</span>
+          Help & Support
+        </button>
       </aside>
 
-      <!-- Main Content -->
       <main class="main-content">
-        <!-- Card Row -->
-        <div class="card-row">
-          <div class="card card-blue">
-            <h3 id="total-lectures">0</h3>
-            <p>Total Lectures</p>
+        <!-- Dashboard Section -->
+        <div id="dashboard-section" class="content-section active">
+          <div class="section-header">
+            <h2 class="section-title">📊 Dashboard Overview</h2>
           </div>
-          <div class="card card-purple">
-            <h3 id="total-left">0</h3>
-            <p>Total Left</p>
+          
+          <!-- Card Row -->
+          <div class="card-row">
+            <div class="card card-blue">
+              <h3 id="total-lectures">0</h3>
+              <p>Total Lectures</p>
+            </div>
+            <div class="card card-purple">
+              <h3 id="total-left">0</h3>
+              <p>Remaining</p>
+            </div>
+            <div class="card card-green">
+              <h3 id="total-done">0</h3>
+              <p>Completed</p>
+            </div>
           </div>
-          <div class="card card-green">
-            <h3 id="total-done">0</h3>
-            <p>Total Done</p>
+
+          <!-- Today's Schedule -->
+          <div class="content-section active">
+            <h3 class="section-title">📅 Today's Schedule</h3>
+            <div id="todays-schedules" class="section-box">
+              Loading today's schedule...
+            </div>
+          </div>
+
+          <!-- Upcoming Events -->
+          <div class="content-section active">
+            <h3 class="section-title">🎯 Upcoming Events</h3>
+            <div id="upcoming-adjustments" class="section-box">
+              No upcoming events scheduled.
+            </div>
+          </div>
+
+          <!-- Recent Activities -->
+          <div class="content-section active">
+            <h3 class="section-title">📋 Recent Activities</h3>
+            <div id="recent-activities" class="section-box">
+              Loading recent activities...
+            </div>
           </div>
         </div>
 
-        <!-- Section 1 -->
-        <section>
-          <h3>Upcoming Adjustments</h3>
-          <div class="section-box" id="upcoming-adjustments">
-            No adjustments scheduled yet.
+        <!-- Schedule Section -->
+        <div id="schedule-section" class="content-section">
+          <div class="section-header">
+            <h2 class="section-title">📅 My Weekly Schedule</h2>
+            <button onclick="refreshSchedule()" class="btn btn-primary">
+              🔄 Refresh
+            </button>
           </div>
-        </section>
-
-        <!-- Section 2 -->
-        <section>
-          <h3>Today's Schedules</h3>
-          <div class="section-box" id="todays-schedules">Upcoming soon...</div>
-        </section>
-
-        <!-- Section 3 -->
-        <section>
-          <h3>Adjustment Proposals</h3>
-          <div class="section-box" id="adjustment-proposals">
-            Not scheduled yet.
+          <div id="weekly-schedule">
+            <p>Loading your weekly schedule...</p>
           </div>
-        </section>
+        </div>
+
+        <!-- Leave Request Section -->
+        <div id="leave-request-section" class="content-section">
+          <div class="section-header">
+            <h2 class="section-title">📝 Request Leave</h2>
+          </div>
+          
+          <div class="leave-form-container active">
+            <h2>📝 Submit Leave Request</h2>
+            <form id="leave-Form">
+              <div class="form-group">
+                <label>Select Day</label>
+                <select class="day-leave-select">
+                  <option value="monday">Monday</option>
+                  <option value="tuesday">Tuesday</option>
+                  <option value="wednesday">Wednesday</option>
+                  <option value="thursday">Thursday</option>
+                  <option value="friday">Friday</option>
+                  <option value="saturday">Saturday</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label>Reason for Leave</label>
+                <textarea id="reason" placeholder="Please provide a detailed reason for your leave request..."></textarea>
+              </div>
+              
+              <div style="display: flex; gap: 1rem;">
+                <button type="submit" class="btn btn-success">📤 Submit Request</button>
+                <button type="button" id="cancel" class="btn btn-danger">❌ Cancel</button>
+              </div>
+            </form>
+            <div id="leave-success" class="message"></div>
+          </div>
+        </div>
+
+        <!-- Attendance Section -->
+        <div id="attendance-section" class="content-section">
+          <div class="section-header">
+            <h2 class="section-title">✅ Attendance Overview</h2>
+          </div>
+          <div class="message info">
+            <p>📊 Attendance tracking feature coming soon! You'll be able to view your attendance history and statistics.</p>
+          </div>
+        </div>
+
+        <!-- Profile Section -->
+        <div id="profile-section" class="content-section">
+          <div class="section-header">
+            <h2 class="section-title">👤 My Profile</h2>
+          </div>
+          
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="profile-name" placeholder="Enter your full name" />
+          </div>
+          
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="profile-email" placeholder="Enter your email" readonly />
+          </div>
+          
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" id="profile-phone" placeholder="Enter your phone number" />
+          </div>
+          
+          <div class="form-group">
+            <label>Department</label>
+            <input type="text" id="profile-department" placeholder="Enter your department" />
+          </div>
+          
+          <button class="btn btn-success">💾 Update Profile</button>
+        </div>
+
+        <!-- Notifications Section -->
+        <div id="notifications-section" class="content-section">
+          <div class="section-header">
+            <h2 class="section-title">🔔 Notifications</h2>
+            <button onclick="markAllRead()" class="btn btn-primary">
+              ✅ Mark All Read
+            </button>
+          </div>
+          <div id="notifications-list">
+            <div class="message info">
+              <p>🔔 No new notifications at the moment.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Help Section -->
+        <div id="help-section" class="content-section">
+          <div class="section-header">
+            <h2 class="section-title">❓ Help & Support</h2>
+          </div>
+          
+          <div class="content-section active">
+            <h3>📚 Frequently Asked Questions</h3>
+            <div class="section-box">
+              <div style="text-align: left;">
+                <p><strong>Q: How do I request leave?</strong></p>
+                <p>A: Go to the "Request Leave" section, select the day and provide a reason.</p>
+                <br>
+                <p><strong>Q: How can I view my schedule?</strong></p>
+                <p>A: Click on "My Schedule" to see your weekly timetable.</p>
+                <br>
+                <p><strong>Q: Who can I contact for support?</strong></p>
+                <p>A: Contact the admin or IT support team for technical issues.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="content-section active">
+            <h3>📞 Contact Support</h3>
+            <div class="section-box">
+              <p>📧 Email: support@schedulesync.com</p>
+              <p>📱 Phone: +1 (555) 123-4567</p>
+              <p>🕒 Hours: Monday - Friday, 9:00 AM - 5:00 PM</p>
+            </div>
+          </div>
+        </div>
       </main>
     </div>
-    <section id="leave-form-section" style="display: none; margin-top: 2rem">
-      <h2>Request Leave</h2>
-      <form id="leave-Form">
-        <label>select a day
-              <select class="day-leave-select" >
-                <option value="monday">Monday</option>
-                <option value="tuesday">Tuesday</option>
-                <option value="wednesday">Wednesday</option>
-                <option value="thursday">Thursday</option>
-                <option value="friday">Friday</option>
-                <option value="saturday">Saturday</option>
-              </select>  
-              </label>
-              <br /><br />
-        <label
-          >Reason:
-          <textarea name="reason" rows="4" id="reason"></textarea></label
-        ><br /><br />
-        <button type="submit">Submit Leave Request</button>
-        <button id="cancel">Cancel</button>
-      </form>
-      <p id="leave-success" style="color: green"></p>
-    </section>
-    <script src="js/dashboard.js"></script>
+
+    <script>
+      let currentUser = null;
+
+      // Section Management
+      function showSection(sectionName) {
+        // Hide all sections
+        document.querySelectorAll('.content-section').forEach(section => {
+          section.classList.remove('active');
+        });
+        
+        // Remove active class from all sidebar buttons
+        document.querySelectorAll('.sidebar button').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        
+        // Show selected section
+        document.getElementById(sectionName + '-section').classList.add('active');
+        
+        // Add active class to clicked button
+        event.target.classList.add('active');
+        
+        // Load section-specific data
+        loadSectionData(sectionName);
+      }
+
+      function loadSectionData(sectionName) {
+        switch(sectionName) {
+          case 'dashboard':
+            loadDashboardData();
+            break;
+          case 'schedule':
+            loadWeeklySchedule();
+            break;
+          case 'profile':
+            loadProfile();
+            break;
+          case 'notifications':
+            loadNotifications();
+            break;
+        }
+      }
+
+      // Dashboard Functions
+      async function loadDashboardData() {
+        if (!currentUser) return;
+        
+        try {
+          // Load teacher summary
+          const response = await fetch(`/api/auth/teacherLectureSummary/${currentUser.username}`, {
+            credentials: 'include'
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            document.getElementById("total-lectures").textContent = data.total || 0;
+            document.getElementById("total-done").textContent = data.done || 0;
+            document.getElementById("total-left").textContent = data.pending || 0;
+          }
+          
+          // Load today's schedule
+          loadTodaysSchedule();
+          loadRecentActivities();
+        } catch (error) {
+          console.error('Error loading dashboard data:', error);
+        }
+      }
+
+      async function loadTodaysSchedule() {
+        const today = new Date().toLocaleDateString("en-US", { weekday: "long" }).toLowerCase();
+        
+        try {
+          const response = await fetch(`/api/auth/showLectures/${currentUser.username}`, {
+            credentials: 'include'
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            const todayLectures = data.lectures.filter(lecture => lecture.day === today);
+            
+            const scheduleContainer = document.getElementById('todays-schedules');
+            
+            if (todayLectures.length === 0) {
+              scheduleContainer.innerHTML = '<p>🎉 No classes scheduled for today!</p>';
+            } else {
+              scheduleContainer.innerHTML = todayLectures.map(lecture => `
+                <div class="schedule-item">
+                  <div class="schedule-time">Period ${lecture.period} • ${lecture.startTime} - ${lecture.endTime}</div>
+                  <div class="schedule-subject">${lecture.subject}</div>
+                  <div class="schedule-room">Room: ${lecture.room}</div>
+                </div>
+              `).join('');
+            }
+          }
+        } catch (error) {
+          console.error('Error loading today\'s schedule:', error);
+          document.getElementById('todays-schedules').innerHTML = '<p>Error loading schedule</p>';
+        }
+      }
+
+      function loadRecentActivities() {
+        const activities = [
+          '📚 Completed Mathematics lecture in Room 101',
+          '✅ Submitted attendance for Period 3',
+          '📝 Leave request approved for next Monday',
+          '🔄 Schedule updated for this week',
+          '📊 Monthly report generated'
+        ];
+        
+        const activitiesHtml = activities.map(activity => 
+          `<div class="schedule-item">${activity}</div>`
+        ).join('');
+        
+        document.getElementById('recent-activities').innerHTML = activitiesHtml;
+      }
+
+      async function loadWeeklySchedule() {
+        if (!currentUser) return;
+        
+        try {
+          const response = await fetch(`/api/auth/showLectures/${currentUser.username}`, {
+            credentials: 'include'
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            const lectures = data.lectures;
+            
+            const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+            const scheduleHtml = days.map(day => {
+              const dayLectures = lectures.filter(lecture => lecture.day === day);
+              
+              return `
+                <div class="content-section active" style="margin-bottom: 1rem;">
+                  <h3 class="section-title">${day.charAt(0).toUpperCase() + day.slice(1)}</h3>
+                  <div class="section-box" style="min-height: auto; padding: 1rem;">
+                    ${dayLectures.length === 0 ? 
+                      '<p>No classes scheduled</p>' : 
+                      dayLectures.map(lecture => `
+                        <div class="schedule-item">
+                          <div class="schedule-time">Period ${lecture.period} • ${lecture.startTime} - ${lecture.endTime}</div>
+                          <div class="schedule-subject">${lecture.subject}</div>
+                          <div class="schedule-room">Room: ${lecture.room}</div>
+                        </div>
+                      `).join('')
+                    }
+                  </div>
+                </div>
+              `;
+            }).join('');
+            
+            document.getElementById('weekly-schedule').innerHTML = scheduleHtml;
+          }
+        } catch (error) {
+          console.error('Error loading weekly schedule:', error);
+          document.getElementById('weekly-schedule').innerHTML = '<p>Error loading schedule</p>';
+        }
+      }
+
+      function loadProfile() {
+        if (currentUser) {
+          document.getElementById('profile-email').value = currentUser.username;
+        }
+      }
+
+      function loadNotifications() {
+        const notifications = [
+          { message: '📚 New lecture assigned for tomorrow', time: '2 hours ago', read: false },
+          { message: '✅ Leave request approved', time: '1 day ago', read: true },
+          { message: '🔄 Schedule updated', time: '2 days ago', read: true }
+        ];
+        
+        const notificationsHtml = notifications.map(notification => `
+          <div class="schedule-item" style="border-left-color: ${notification.read ? 'var(--text-secondary)' : 'var(--warning-color)'};">
+            <div class="schedule-subject">${notification.message}</div>
+            <div class="schedule-room">${notification.time}</div>
+          </div>
+        `).join('');
+        
+        document.getElementById('notifications-list').innerHTML = notificationsHtml || '<div class="message info"><p>🔔 No notifications</p></div>';
+      }
+
+      // Leave Request Functions
+      document.addEventListener('DOMContentLoaded', function() {
+        const leaveForm = document.getElementById("leave-Form");
+        if (leaveForm) {
+          leaveForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const day = document.querySelector(".day-leave-select").value;
+            const reason = document.getElementById("reason").value;
+            
+            if (!day || !reason) {
+              showMessage("Please fill all fields", "error");
+              return;
+            }
+            
+            const leaveData = {
+              username: currentUser?.username || "unknown",
+              day,
+              reason,
+            };
+
+            try {
+              const res = await fetch("/api/auth/request", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(leaveData),
+                credentials: "include"
+              });
+
+              const result = await res.json();
+              if (res.ok) {
+                showMessage("Leave request submitted successfully!", "success");
+                leaveForm.reset();
+              } else {
+                showMessage(result.message || "Failed to submit leave.", "error");
+              }
+            } catch (error) {
+              console.error("Error submitting leave:", error);
+              showMessage("Connection error. Please try again.", "error");
+            }
+          });
+        }
+
+        document.getElementById("cancel").addEventListener("click", (e) => {
+          e.preventDefault();
+          document.getElementById("leave-Form").reset();
+          showMessage("Form cleared", "info");
+        });
+      });
+
+      // Utility Functions
+      function showMessage(message, type) {
+        const messageEl = document.getElementById('leave-success');
+        messageEl.className = `message ${type}`;
+        messageEl.textContent = message;
+        messageEl.style.display = 'block';
+        
+        setTimeout(() => {
+          messageEl.style.display = 'none';
+        }, 5000);
+      }
+
+      function refreshSchedule() {
+        loadWeeklySchedule();
+        showMessage("Schedule refreshed!", "success");
+      }
+
+      function markAllRead() {
+        showMessage("All notifications marked as read!", "success");
+        setTimeout(() => loadNotifications(), 1000);
+      }
+
+      // Check session and initialize
+      async function checkSession() {
+        try {
+          const response = await fetch('/api/getsession', {
+            credentials: 'include'
+          });
+          
+          if (!response.ok) {
+            window.location.href = '/';
+            return null;
+          }
+          
+          const sessionData = await response.json();
+          return sessionData;
+        } catch (error) {
+          console.error('Session check failed:', error);
+          window.location.href = '/';
+          return null;
+        }
+      }
+
+      // Initialize dashboard
+      async function initDashboard() {
+        const sessionUser = await checkSession();
+        if (!sessionUser) return;
+        
+        currentUser = sessionUser;
+        
+        // Update UI with user info
+        document.getElementById("teacher-name").textContent = sessionUser.username;
+        
+        // Update date and time
+        const updateDateTime = () => {
+          const now = new Date();
+          document.getElementById("current-date").textContent = now.toLocaleDateString();
+          document.getElementById("current-time").textContent = now.toLocaleTimeString();
+        };
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+        
+        // Load initial data
+        loadDashboardData();
+      }
+
+      // Initialize when page loads
+      document.addEventListener('DOMContentLoaded', function() {
+        initDashboard();
+        
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', async function() {
+          try {
+            const response = await fetch('/api/auth/logout', {
+              method: 'POST',
+              credentials: 'include'
+            });
+            
+            if (response.ok) {
+              localStorage.removeItem('user');
+              window.location.href = '/';
+            }
+          } catch (error) {
+            console.error('Logout error:', error);
+            window.location.href = '/';
+          }
+        });
+      });
+    </script>
   </body>
 </html>

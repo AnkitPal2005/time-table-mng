@@ -1,124 +1,1752 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard | ScheduleSync</title>
-    <link rel="stylesheet" href="css/style.css" />
-  </head>
-  <body>
+    <style>
+        /* Modern Admin Dashboard CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --border-color: #e5e7eb;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-primary);
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow-md);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .user {
+            padding: 0.5rem 1rem;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-lg);
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, var(--danger-color), #dc2626);
+            color: white;
+            border: none;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.875rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Admin Container */
+        .admin-container {
+            display: flex;
+            height: calc(100vh - 70px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            gap: 0.5rem;
+            box-shadow: var(--shadow-sm);
+            overflow-y: auto;
+        }
+
+        .sidebar button {
+            padding: 0.875rem 1rem;
+            background: none;
+            border: none;
+            text-align: left;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: var(--radius-lg);
+            transition: all 0.2s ease;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .sidebar button:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            transform: translateX(4px);
+        }
+
+        .sidebar button.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            font-weight: 600;
+            box-shadow: var(--shadow-md);
+        }
+
+        .sidebar .icon {
+            font-size: 1.125rem;
+        }
+
+        .sidebar span {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin: 1rem 0 0.5rem 0;
+            padding: 0 1rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            background: var(--bg-secondary);
+            overflow-y: auto;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-primary);
+            padding: 1.5rem;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .stat-card .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-card .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        /* Content Sections */
+        .content-section {
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-color), #059669);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning-color), #d97706);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger-color), #dc2626);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Timetable */
+        .timetable-container {
+            overflow-x: auto;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .timetable {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+        }
+
+        .timetable th,
+        .timetable td {
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.875rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .timetable th {
+            background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+            font-weight: 600;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            font-size: 0.75rem;
+        }
+
+        .timetable th:first-child {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            font-weight: 700;
+        }
+
+        .timetable td {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .timetable td:hover {
+            background: var(--bg-tertiary);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            background: var(--bg-primary);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgb(99 102 241 / 0.1);
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            display: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: var(--radius-xl);
+            width: 100%;
+            max-width: 500px;
+            margin: 1rem;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-color);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            gap: 1rem;
+        }
+
+        /* Leave Requests */
+        .leave-request-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .leave-request-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .leave-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .leave-teacher {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.125rem;
+        }
+
+        .leave-day {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-lg);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .leave-reason {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .leave-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        /* Message */
+        .message {
+            padding: 1rem;
+            border-radius: var(--radius-lg);
+            margin-bottom: 1rem;
+            font-weight: 500;
+            display: none;
+        }
+
+        .message.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            display: block;
+        }
+
+        .message.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            display: block;
+        }
+
+        /* Lecture Assignment Styles */
+        .lecture-item {
+            transition: all 0.3s ease;
+        }
+
+        .lecture-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .lecture-info {
+            font-size: 0.875rem;
+        }
+
+        .lecture-info strong {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .teacher-selection {
+            background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            border: 2px solid var(--primary-color);
+            margin: 1rem 0;
+        }
+
+        .assignment-success {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+            border: 2px solid var(--success-color);
+            border-radius: var(--radius-lg);
+            padding: 1rem;
+            margin: 1rem 0;
+            text-align: center;
+            color: var(--success-color);
+            font-weight: 600;
+        }
+
+        .assignment-error {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.1));
+            border: 2px solid var(--danger-color);
+            border-radius: var(--radius-lg);
+            padding: 1rem;
+            margin: 1rem 0;
+            text-align: center;
+            color: var(--danger-color);
+            font-weight: 600;
+        }
+
+        /* Enhanced Modal */
+        .modal {
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            animation: slideInUp 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .admin-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                overflow-x: auto;
+                padding: 1rem;
+            }
+
+            .sidebar button {
+                white-space: nowrap;
+                min-width: 120px;
+            }
+
+            .main-content {
+                padding: 1.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .user-info {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .modal-content {
+                margin: 0.5rem;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
     <header class="header">
-      <h1>Schedule Sync</h1>
-      <div class="user-info">
-        <span id="date-time"></span>
-        <span class="user">Logged in as <strong>Admin</strong></span>
-        <button id="logoutBtn" class="logout-btn">Logout</button>
-      </div>
+        <h1>🛡️ ScheduleSync Admin</h1>
+        <div class="user-info">
+            <div class="date-time-info">
+                <span id="date-time" class="current-date"></span>
+            </div>
+            <div class="user">
+                <span class="user-label">Administrator</span>
+                <strong>Admin Panel</strong>
+            </div>
+            <button id="logoutBtn" class="logout-btn">Sign Out</button>
+        </div>
     </header>
 
     <div class="admin-container">
-      <aside class="sidebar">
-        <button>Dashboard</button>
-        <button>Calendar</button>
-        <button id="show-leave-btn">Approve Leave</button>
-        <button>Inbox</button>
-        <button class="active">Meeting</button>
-        <button>Scheduling</button>
-        <button class="upcoming-btn">Upcoming Event</button>
-      </aside>
+        <aside class="sidebar">
+            <button class="active" onclick="showSection('dashboard')">
+                <span class="icon">📊</span>
+                Dashboard
+            </button>
+            <button onclick="showSection('timetable')">
+                <span class="icon">📅</span>
+                Timetable
+            </button>
+            <button onclick="showSection('leave-requests')">
+                <span class="icon">✅</span>
+                Leave Requests
+            </button>
+            <button onclick="showSection('teachers')">
+                <span class="icon">👥</span>
+                Teachers
+            </button>
 
-      <main class="main-content">
-        <h2>Time Table</h2>
+            <span>Management</span>
 
-        <select id="teacherFilter"></select>
+            <button onclick="showSection('meetings')">
+                <span class="icon">🤝</span>
+                Meetings
+            </button>
+            <button onclick="showSection('reports')">
+                <span class="icon">📊</span>
+                Reports
+            </button>
+            <button onclick="showSection('settings')">
+                <span class="icon">⚙️</span>
+                Settings
+            </button>
+        </aside>
 
-        <button onclick="openForm()" class="add-btn">
-          + Add Timetable Details
-        </button>
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="content-section active">
+                <div class="section-header">
+                    <h2 class="section-title">📊 Dashboard Overview</h2>
+                </div>
 
-        <table class="timetable">
-          <thead>
-            <tr>
-              <th>Days/Time</th>
-              <th>Period 1</th>
-              <th>Period 2</th>
-              <th>Period 3</th>
-              <th>Period 4</th>
-              <th>Period 5</th>
-              <th>Period 6</th>
-              <th>Period 7</th>
-              <th>Period 8</th>
-            </tr>
-          </thead>
-          <tbody id="timetable-body"></tbody>
-        </table>
-        <!-- Time Table ke neeche ya jahan bhi leave requests dikhani ho -->
-        <div id="leave-requests-section" style="display: none">
-          <h3>Leave Requests</h3>
-          <div id="leave-list"></div>
-        </div>
-      </main>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-number" id="total-teachers">0</div>
+                        <div class="stat-label">Total Teachers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📚</div>
+                        <div class="stat-number" id="total-subjects">0</div>
+                        <div class="stat-label">Total Subjects</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📋</div>
+                        <div class="stat-number" id="pending-leaves">0</div>
+                        <div class="stat-label">Pending Leaves</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-number" id="approved-leaves">0</div>
+                        <div class="stat-label">Approved Leaves</div>
+                    </div>
+                </div>
+
+                <div class="content-section active">
+                    <h3>Recent Activities</h3>
+                    <div id="recent-activities">
+                        <p>Loading recent activities...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timetable Section -->
+            <div id="timetable-section" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">📅 Timetable Management</h2>
+                    <div class="table-actions">
+                        <select id="teacherFilter" class="form-group">
+                            <option value="">All Teachers</option>
+                        </select>
+                        <button onclick="openForm()" class="btn btn-primary">
+                            ➕ Add Schedule
+                        </button>
+                    </div>
+                </div>
+
+                <div class="timetable-container">
+                    <div class="timetable-wrapper">
+                        <table class="timetable">
+                            <thead>
+                                <tr>
+                                    <th class="day-column">
+                                        <div class="header-content">
+                                            <span class="header-icon">📅</span>
+                                            <span class="header-text">Days</span>
+                                        </div>
+                                    </th>
+                                    <th class="period-column">
+                                        <div class="header-content">
+                                            <span class="period-number">1</span>
+                                            <span class="period-time">9:00-10:00</span>
+                                        </div>
+                                    </th>
+                                    <th class="period-column">
+                                        <div class="header-content">
+                                            <span class="period-number">2</span>
+                                            <span class="period-time">10:00-11:00</span>
+                                        </div>
+                                    </th>
+                                    <th class="period-column">
+                                        <div class="header-content">
+                                            <span class="period-number">3</span>
+                                            <span class="period-time">11:00-12:00</span>
+                                        </div>
+                                    </th>
+                                    <th class="period-column">
+                                        <div class="header-content">
+                                            <span class="period-number">4</span>
+                                            <span class="period-time">12:00-1:00</span>
+                                        </div>
+                                    </th>
+                                    <th class="period-column break-column">
+                                        <div class="header-content">
+                                            <span class="break-text">🍽️ LUNCH</span>
+                                            <span class="period-time">1:00-2:00</span>
+                                        </div>
+                                    </th>
+                                    <th class="period-column">
+                                        <div class="header-content">
+                                            <span class="period-number">5</span>
+                                            <span class="period-time">2:00-3:00</span>
+                                        </div>
+                                    </th>
+                                    <th class="period-column">
+                                        <div class="header-content">
+                                            <span class="period-number">6</span>
+                                            <span class="period-time">3:00-4:00</span>
+                                        </div>
+                                    </th>
+                                    <th class="period-column">
+                                        <div class="header-content">
+                                            <span class="period-number">7</span>
+                                            <span class="period-time">4:00-5:00</span>
+                                        </div>
+                                    </th>
+                                    <th class="period-column">
+                                        <div class="header-content">
+                                            <span class="period-number">8</span>
+                                            <span class="period-time">5:00-6:00</span>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="timetable-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leave Requests Section -->
+            <div id="leave-requests-section" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">✅ Leave Requests</h2>
+                    <button onclick="refreshLeaveRequests()" class="btn btn-primary">
+                        🔄 Refresh
+                    </button>
+                </div>
+                <div id="leave-list">
+                    <p>Loading leave requests...</p>
+                </div>
+            </div>
+
+            <!-- Teachers Section -->
+            <div id="teachers-section" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">👥 Teachers Management</h2>
+                    <button onclick="showAddTeacherForm()" class="btn btn-primary">
+                        ➕ Add Teacher
+                    </button>
+                </div>
+                <div id="teachers-list">
+                    <p>Loading teachers...</p>
+                </div>
+            </div>
+
+            <!-- Meetings Section -->
+            <div id="meetings-section" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">🤝 Meetings</h2>
+                    <button onclick="scheduleMeeting()" class="btn btn-primary">
+                        📅 Schedule Meeting
+                    </button>
+                </div>
+                <div id="meetings-list">
+                    <div class="message">
+                        <p>🎉 Meetings feature coming soon! You'll be able to schedule and manage meetings with
+                            teachers.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Section -->
+            <div id="reports-section" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">📊 Reports</h2>
+                    <button onclick="generateReport()" class="btn btn-success">
+                        📄 Generate Report
+                    </button>
+                </div>
+                <div id="reports-content">
+                    <div class="message">
+                        <p>📈 Reports feature coming soon! You'll be able to generate attendance, schedule, and
+                            performance reports.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settings-section" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">⚙️ Settings</h2>
+                </div>
+                <div id="settings-content">
+                    <div class="form-group">
+                        <label>School Name</label>
+                        <input type="text" value="ScheduleSync Academy" />
+                    </div>
+                    <div class="form-group">
+                        <label>Academic Year</label>
+                        <input type="text" value="2024-2025" />
+                    </div>
+                    <div class="form-group">
+                        <label>Time Zone</label>
+                        <select>
+                            <option>Asia/Kolkata (IST)</option>
+                            <option>America/New_York (EST)</option>
+                            <option>Europe/London (GMT)</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-success">💾 Save Settings</button>
+                </div>
+            </div>
+        </main>
     </div>
 
+    <!-- Add Schedule Modal -->
     <div id="formModal" class="modal">
-      <div class="modal-content">
-        <h2>Add Time Table Details</h2>
+        <div class="modal-content">
+            <h2>➕ Add Time Table Details</h2>
 
-        <label>Teacher</label>
-        <select id="teacherSelect"></select>
+            <div class="form-group">
+                <label>Teacher</label>
+                <select id="teacherSelect"></select>
+            </div>
 
-        <label>Subject Name</label>
-        <input type="text" id="subject" />
+            <div class="form-group">
+                <label>Subject Name</label>
+                <input type="text" id="subject" placeholder="Enter subject name" />
+            </div>
 
-        <label>Room Number</label>
-        <input type="text" id="room" />
+            <div class="form-group">
+                <label>Room Number</label>
+                <input type="text" id="room" placeholder="Enter room number" />
+            </div>
 
-        <label>Day</label>
-        <select id="day">
-          <option>Monday</option>
-          <option>Tuesday</option>
-          <option>Wednesday</option>
-          <option>Thursday</option>
-          <option>Friday</option>
-          <option>Saturday</option>
-        </select>
+            <div class="form-group">
+                <label>Day</label>
+                <select id="day">
+                    <option value="">Select Day</option>
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                </select>
+            </div>
 
-        <label>Period Number</label>
-        <select id="period">
-          <option value="1">Period 1</option>
-          <option value="2">Period 2</option>
-          <option value="3">Period 3</option>
-          <option value="4">Period 4</option>
-          <option value="5">Period 5</option>
-          <option value="6">Period 6</option>
-          <option value="7">Period 7</option>
-          <option value="8">Period 8</option>
-        </select>
+            <div class="form-group">
+                <label>Period Number</label>
+                <select id="period">
+                    <option value="">Select Period</option>
+                    <option value="1">Period 1</option>
+                    <option value="2">Period 2</option>
+                    <option value="3">Period 3</option>
+                    <option value="4">Period 4</option>
+                    <option value="5">Period 5</option>
+                    <option value="6">Period 6</option>
+                    <option value="7">Period 7</option>
+                    <option value="8">Period 8</option>
+                </select>
+            </div>
 
-        <label>Start Time</label>
-        <input type="time" id="startTime" />
+            <div class="form-group">
+                <label>Start Time</label>
+                <input type="time" id="startTime" />
+            </div>
 
-        <label>End Time</label>
-        <input type="time" id="endTime" />
+            <div class="form-group">
+                <label>End Time</label>
+                <input type="time" id="endTime" />
+            </div>
 
-        <div class="modal-buttons">
-          <button onclick="closeForm()">Cancel</button>
-          <button onclick="saveLecture()">Save</button>
+            <div class="modal-buttons">
+                <button onclick="closeForm()" class="btn">Cancel</button>
+                <button onclick="saveLecture()" class="btn btn-primary">💾 Save</button>
+            </div>
         </div>
-      </div>
     </div>
+
     <!-- Teacher Lecture Modal -->
-<div id="teacherLectureModal" class="modal">
-  <div class="modal-content">
-    <h2>Adjusted Lectures</h2>
-    <div id="adjustLectureList" class="lecture-list"></div>
-    <div class="modal-buttons" style="text-align: right; margin-top: 15px;">
-      <button onclick="closeTeacherLectures()">Close</button>
+    <div id="teacherLectureModal" class="modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <h2>🔄 Lecture Assignment</h2>
+            <div id="adjustLectureList" class="lecture-list" style="max-height: 500px; overflow-y: auto;"></div>
+            <div class="modal-buttons">
+                <button onclick="closeTeacherLectures()" class="btn btn-danger">✖️ Close</button>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
+    <script>
+        // Section Management
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
 
+            // Remove active class from all sidebar buttons
+            document.querySelectorAll('.sidebar button').forEach(btn => {
+                btn.classList.remove('active');
+            });
 
-    <script src="js/admin.js"></script>
-  </body>
-</html>
+            // Show selected section
+            document.getElementById(sectionName + '-section').classList.add('active');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+
+            // Load section-specific data
+            loadSectionData(sectionName);
+        }
+
+        function loadSectionData(sectionName) {
+            switch (sectionName) {
+                case 'dashboard':
+                    loadDashboardStats();
+                    break;
+                case 'timetable':
+                    loadTeachers();
+                    renderTable();
+                    break;
+                case 'leave-requests':
+                    loadLeaveRequests();
+                    break;
+                case 'teachers':
+                    loadTeachersList();
+                    break;
+            }
+        }
+
+        // Dashboard Functions
+        async function loadDashboardStats() {
+            try {
+                // Load teachers count
+                const teachersResponse = await fetch('/api/auth/teachers', {
+                    credentials: 'include'
+                });
+                if (teachersResponse.ok) {
+                    const teachersData = await teachersResponse.json();
+                    document.getElementById('total-teachers').textContent = teachersData.teachers.length;
+                }
+
+                // Load leave requests
+                const leaveResponse = await fetch('/api/auth/leave', {
+                    credentials: 'include'
+                });
+                if (leaveResponse.ok) {
+                    const leaveData = await leaveResponse.json();
+                    const pending = leaveData.filter(leave => leave.status === 'pending' || !leave.status).length;
+                    const approved = leaveData.filter(leave => leave.status === 'approved').length;
+                    document.getElementById('pending-leaves').textContent = pending;
+                    document.getElementById('approved-leaves').textContent = approved;
+                }
+
+                // Mock data for subjects
+                document.getElementById('total-subjects').textContent = '12';
+
+                // Load recent activities
+                loadRecentActivities();
+            } catch (error) {
+                console.error('Error loading dashboard stats:', error);
+            }
+        }
+
+        function loadRecentActivities() {
+            const activities = [
+                '📚 New lecture added for Mathematics',
+                '✅ Leave request approved for John Doe',
+                '👥 New teacher registered: Jane Smith',
+                '📅 Timetable updated for Monday',
+                '🔄 System backup completed'
+            ];
+
+            const activitiesHtml = activities.map(activity =>
+                `<div class="activity-item" style="padding: 0.75rem; border-left: 3px solid var(--primary-color); margin-bottom: 0.5rem; background: var(--bg-tertiary); border-radius: var(--radius-md);">${activity}</div>`
+            ).join('');
+
+            document.getElementById('recent-activities').innerHTML = activitiesHtml;
+        }
+
+        // Include all the existing admin.js functions here
+        function openForm() {
+            // Clear form
+            document.getElementById("teacherSelect").value = "";
+            document.getElementById("subject").value = "";
+            document.getElementById("room").value = "";
+            document.getElementById("day").value = "";
+            document.getElementById("period").value = "";
+            document.getElementById("startTime").value = "";
+            document.getElementById("endTime").value = "";
+
+            document.getElementById("formModal").style.display = "flex";
+        }
+
+        function closeForm() {
+            document.getElementById("formModal").style.display = "none";
+        }
+
+        async function saveLecture() {
+            const teacher = document.getElementById("teacherSelect").value;
+            const subject = document.getElementById("subject").value.trim();
+            const room = document.getElementById("room").value.trim();
+            const day = document.getElementById("day").value;
+            const period = parseInt(document.getElementById("period").value);
+            const startTime = document.getElementById("startTime").value;
+            const endTime = document.getElementById("endTime").value;
+
+            console.log("Form values:", { teacher, subject, room, day, period, startTime, endTime });
+
+            if (!teacher || !subject || !room || !day || !period || !startTime || !endTime) {
+                showMessage("Please fill all fields. Missing: " +
+                    [
+                        !teacher ? "Teacher" : "",
+                        !subject ? "Subject" : "",
+                        !room ? "Room" : "",
+                        !day ? "Day" : "",
+                        !period ? "Period" : "",
+                        !startTime ? "Start Time" : "",
+                        !endTime ? "End Time" : ""
+                    ].filter(Boolean).join(", "), "error");
+                return;
+            }
+
+            const newLecture = { teacher, subject, room, day, period, startTime, endTime };
+
+            try {
+                const response = await fetch("/api/auth/lectures", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(newLecture),
+                    credentials: "include"
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showMessage("Lecture added successfully!", "success");
+                    closeForm();
+                    renderTable();
+                } else {
+                    showMessage("Error adding lecture: " + data.message, "error");
+                }
+            } catch (err) {
+                console.error("Fetch Error", err);
+                showMessage("Please try again later", "error");
+            }
+        }
+
+        async function renderTable() {
+            const tbody = document.getElementById("timetable-body");
+            tbody.innerHTML = "";
+
+            const selectedTeacher = document.getElementById("teacherFilter").value;
+            const dayList = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+            let lectures = [];
+
+            try {
+                const response = await fetch(`/api/auth/showLectures/${selectedTeacher}`, {
+                    credentials: "include"
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    lectures = data.lectures;
+                }
+            } catch (error) {
+                console.error("Fetch Error", error);
+                return;
+            }
+
+            dayList.forEach((day) => {
+                const row = document.createElement("tr");
+                const dayCell = document.createElement("td");
+                dayCell.textContent = day.charAt(0).toUpperCase() + day.slice(1);
+                dayCell.style.fontWeight = "600";
+                dayCell.style.background = "var(--bg-tertiary)";
+                row.appendChild(dayCell);
+
+                for (let i = 1; i <= 8; i++) {
+                    const cell = document.createElement("td");
+                    const lecture = lectures.find(
+                        (l) => l.teacher == selectedTeacher && l.day == day && l.period == i
+                    );
+
+                    if (lecture) {
+                        cell.innerHTML = `
+                <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1)); 
+                           padding: 0.5rem; border-radius: var(--radius-md); border-left: 3px solid var(--primary-color);">
+                  <strong style="color: var(--primary-color);">${lecture.subject}</strong><br>
+                  <small style="color: var(--text-secondary);">Room: ${lecture.room}</small><br>
+                  <small style="color: var(--text-secondary);">${lecture.startTime} - ${lecture.endTime}</small>
+                </div>
+              `;
+                    } else {
+                        cell.innerHTML = '<span style="color: var(--text-secondary); font-size: 1.5rem;">—</span>';
+                    }
+                    row.appendChild(cell);
+                }
+
+                tbody.appendChild(row);
+            });
+        }
+
+        async function loadTeachers() {
+            const filterDropdown = document.getElementById("teacherFilter");
+            const formDropdown = document.getElementById("teacherSelect");
+
+            filterDropdown.innerHTML = '<option value="">All Teachers</option>';
+            formDropdown.innerHTML = '<option value="">Select Teacher</option>';
+
+            try {
+                const response = await fetch("/api/auth/teachers", {
+                    credentials: "include",
+                });
+                const data = await response.json();
+                const teachers = data.teachers;
+
+                teachers.forEach((teacher) => {
+                    const option1 = document.createElement("option");
+                    option1.value = teacher.username;
+                    option1.textContent = teacher.username;
+
+                    const option2 = option1.cloneNode(true);
+
+                    filterDropdown.appendChild(option1);
+                    formDropdown.appendChild(option2);
+                });
+            } catch (error) {
+                console.error("Error loading teachers:", error);
+            }
+        }
+
+        async function loadLeaveRequests() {
+            const leaveListDiv = document.getElementById("leave-list");
+            leaveListDiv.innerHTML = '<p>Loading leave requests...</p>';
+
+            try {
+                const res = await fetch("/api/auth/leave", {
+                    credentials: "include",
+                });
+                const leaves = await res.json();
+
+                if (!Array.isArray(leaves) || !leaves.length) {
+                    leaveListDiv.innerHTML = '<div class="message"><p>📋 No leave requests found.</p></div>';
+                    return;
+                }
+
+                leaveListDiv.innerHTML = "";
+                leaves.forEach((leave) => {
+                    const leaveDiv = document.createElement("div");
+                    leaveDiv.className = "leave-request-card";
+                    leaveDiv.innerHTML = `
+              <div class="leave-header">
+                <div class="leave-teacher">${leave.username}</div>
+                <div class="leave-day">${leave.day}</div>
+              </div>
+              <div class="leave-reason">
+                <strong>Reason:</strong> ${leave.reason}
+              </div>
+              <div class="leave-reason">
+                <strong>Status:</strong> <span style="color: var(--warning-color);">${leave.status || 'Pending'}</span>
+              </div>
+              <div class="leave-actions" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                <button onclick="handleApprove('${leave.username}', '${leave.day}')" class="btn btn-success" style="font-size: 0.75rem;">
+                  ✅ Approve
+                </button>
+                <button onclick="handleReject('${leave.username}', '${leave.day}')" class="btn btn-danger" style="font-size: 0.75rem;">
+                  ❌ Reject
+                </button>
+                <button onclick="handleAdjust('${leave.username}', '${leave.day}')" class="btn btn-warning" style="font-size: 0.75rem;">
+                  🔄 Adjust
+                </button>
+                <button onclick="handleDelete('${leave.username}', '${leave.day}')" class="btn" style="background: linear-gradient(135deg, #7f1d1d, #991b1b); color: white; font-size: 0.75rem;">
+                  🗑️ Delete
+                </button>
+              </div>
+            `;
+                    leaveListDiv.appendChild(leaveDiv);
+                });
+            } catch (error) {
+                console.error("Error fetching leave requests", error);
+                leaveListDiv.innerHTML = '<div class="message error"><p>Error loading leave requests.</p></div>';
+            }
+        }
+
+        async function loadTeachersList() {
+            const teachersListDiv = document.getElementById("teachers-list");
+            teachersListDiv.innerHTML = '<p>Loading teachers...</p>';
+
+            try {
+                const response = await fetch("/api/auth/teachers", {
+                    credentials: "include",
+                });
+                const data = await response.json();
+                const teachers = data.teachers;
+
+                teachersListDiv.innerHTML = "";
+                teachers.forEach((teacher) => {
+                    const teacherDiv = document.createElement("div");
+                    teacherDiv.className = "leave-request-card";
+                    teacherDiv.innerHTML = `
+              <div class="leave-header">
+                <div class="leave-teacher">👨‍🏫 ${teacher.username}</div>
+                <div class="leave-day">Active</div>
+              </div>
+              <div class="leave-reason">
+                <strong>Email:</strong> ${teacher.username}<br>
+                <strong>Role:</strong> Teacher<br>
+                <strong>Status:</strong> <span style="color: var(--success-color);">Active</span>
+              </div>
+              <div class="leave-actions">
+                <button onclick="viewTeacherSchedule('${teacher.username}')" class="btn btn-primary">
+                  📅 View Schedule
+                </button>
+                <button onclick="editTeacher('${teacher.username}')" class="btn btn-warning">
+                  ✏️ Edit
+                </button>
+              </div>
+            `;
+                    teachersListDiv.appendChild(teacherDiv);
+                });
+            } catch (error) {
+                console.error("Error loading teachers:", error);
+                teachersListDiv.innerHTML = '<div class="message error"><p>Error loading teachers.</p></div>';
+            }
+        }
+
+        // Leave Management Functions
+        async function handleApprove(username, day) {
+            try {
+                const res = await fetch("/api/auth/approveleave", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify({ username, day }),
+                });
+                const result = await res.json();
+                if (res.ok) {
+                    showMessage("Leave approved successfully!", "success");
+                    loadLeaveRequests();
+                } else {
+                    showMessage(result.message || "Failed to approve leave request.", "error");
+                }
+            } catch (error) {
+                console.error("Error approving leave request:", error);
+                showMessage("Failed to approve leave request. Please try again.", "error");
+            }
+        }
+
+        async function handleReject(username, day) {
+            try {
+                const res = await fetch("/api/auth/reject", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify({ username, day }),
+                });
+                const result = await res.json();
+                if (res.ok) {
+                    showMessage("Leave request rejected successfully!", "success");
+                    loadLeaveRequests();
+                } else {
+                    showMessage(result.message || "Failed to reject leave request.", "error");
+                }
+            } catch (error) {
+                console.error("Error rejecting leave request:", error);
+                showMessage("Failed to reject leave request. Please try again.", "error");
+            }
+        }
+
+        async function handleDelete(username, day) {
+            // Confirm before deleting
+            if (!confirm(`Are you sure you want to delete the leave request for ${username} on ${day}?`)) {
+                return;
+            }
+
+            try {
+                const res = await fetch("/api/auth/deleteleave", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify({ username, day }),
+                });
+
+                const result = await res.json();
+
+                if (res.ok) {
+                    showMessage("🗑️ Leave request deleted successfully!", "success");
+                    loadLeaveRequests();
+                } else {
+                    showMessage(result.message || "Failed to delete leave request.", "error");
+                }
+            } catch (error) {
+                console.error("Error deleting leave request:", error);
+                showMessage("Failed to delete leave request. Please try again.", "error");
+            }
+        }
+
+        async function handleAdjust(username, day) {
+            try {
+                const res = await fetch("/api/auth/getlecturesleave", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include",
+                    body: JSON.stringify({ username, day }),
+                });
+
+                const data = await res.json();
+                const result = data.lectures;
+
+                if (res.ok) {
+                    const container = document.getElementById("adjustLectureList");
+                    container.innerHTML = "";
+
+                    if (!result.length) {
+                        container.innerHTML = `<div class="message info"><p>📅 No lectures found for ${username} on ${day}</p></div>`;
+                    } else {
+                        const lecturesHtml = result.map(lecture => `
+                <div class="lecture-item" style="background: var(--bg-secondary); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1rem; border: 1px solid var(--border-color);">
+                  <div class="lecture-info" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+                    <div><strong>Subject:</strong> ${lecture.subject}</div>
+                    <div><strong>Day:</strong> ${lecture.day}</div>
+                    <div><strong>Room:</strong> ${lecture.room}</div>
+                    <div><strong>Period:</strong> ${lecture.period}</div>
+                    <div><strong>Time:</strong> ${lecture.startTime} - ${lecture.endTime}</div>
+                  </div>
+                  <button onclick="assignTeacher('${username}', '${lecture.day}', ${lecture.period}, '${lecture.startTime}', '${lecture.subject}', '${lecture.room}', '${lecture.endTime}')" 
+                          class="btn btn-warning" style="width: 100%;">
+                    🔄 Find & Assign Teacher
+                  </button>
+                </div>
+              `).join('');
+
+                        container.innerHTML = lecturesHtml;
+                    }
+
+                    document.getElementById("teacherLectureModal").style.display = "flex";
+                } else {
+                    showMessage(data.message || "Failed to get lecture details.", "error");
+                }
+            } catch (error) {
+                console.error("Error adjusting leave request:", error);
+                showMessage("Failed to adjust leave request. Please try again.", "error");
+            }
+        }
+
+        // Utility Functions
+        function showMessage(message, type) {
+            // Create or update message element
+            let messageEl = document.querySelector('.message.show');
+            if (!messageEl) {
+                messageEl = document.createElement('div');
+                messageEl.className = 'message show';
+                document.querySelector('.main-content').prepend(messageEl);
+            }
+
+            messageEl.className = `message ${type} show`;
+            messageEl.textContent = message;
+            messageEl.style.display = 'block';
+
+            setTimeout(() => {
+                messageEl.style.display = 'none';
+            }, 5000);
+        }
+
+        function refreshLeaveRequests() {
+            loadLeaveRequests();
+        }
+
+        function showAddTeacherForm() {
+            showMessage("Add teacher functionality coming soon!", "info");
+        }
+
+        function scheduleMeeting() {
+            showMessage("Meeting scheduling feature coming soon!", "info");
+        }
+
+        function generateReport() {
+            showMessage("Report generation feature coming soon!", "info");
+        }
+
+        function viewTeacherSchedule(username) {
+            document.getElementById("teacherFilter").value = username;
+            showSection('timetable');
+        }
+
+        function editTeacher(username) {
+            showMessage(`Edit teacher ${username} functionality coming soon!`, "info");
+        }
+
+        async function assignTeacher(username, day, period, startTime, subject, room, endTime) {
+            console.log("Finding available teachers for:", username, day, period, startTime);
+
+            try {
+                const res = await fetch("/api/auth/assignteacher", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify({ username, day, period, time: startTime })
+                });
+
+                const result = await res.json();
+
+                if (res.ok) {
+                    const teachers = result.availableTeachers;
+                    console.log("Available teachers:", teachers);
+
+                    if (!teachers.length) {
+                        showMessage("❌ No teachers available for this time slot", "error");
+                        return;
+                    }
+
+                    // Create teacher selection interface
+                    const container = document.getElementById("adjustLectureList");
+                    container.innerHTML = `
+              <div style="background: var(--bg-primary); border-radius: var(--radius-lg); padding: 2rem; border: 1px solid var(--border-color);">
+                <h3 style="margin-bottom: 1.5rem; color: var(--text-primary);">👥 Available Teachers</h3>
+                <div style="margin-bottom: 1.5rem;">
+                  <strong>Lecture Details:</strong><br>
+                  📚 Subject: ${subject}<br>
+                  📅 Day: ${day}<br>
+                  🏫 Room: ${room}<br>
+                  ⏰ Time: ${startTime} - ${endTime}<br>
+                  📊 Period: ${period}
+                </div>
+                <div style="margin-bottom: 1.5rem;">
+                  <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Select Teacher:</label>
+                  <select id="assignDropdown" style="width: 100%; padding: 0.875rem 1rem; border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: 1rem;">
+                    <option value="">Choose a teacher...</option>
+                    ${teachers.map(t =>
+                        `<option value="${t.username}">${t.username} (Current Load: ${t.load} lectures)</option>`
+                    ).join('')}
+                  </select>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                  <button onclick="confirmAssignment('${subject}', '${day}', ${period}, '${startTime}', '${room}', '${endTime}')" 
+                          class="btn btn-success" style="flex: 1;">
+                    ✅ Confirm Assignment
+                  </button>
+                  <button onclick="closeTeacherLectures()" class="btn btn-danger">
+                    ❌ Cancel
+                  </button>
+                </div>
+              </div>
+            `;
+                } else {
+                    showMessage(result.message || "Failed to find available teachers.", "error");
+                }
+            } catch (error) {
+                console.error("Error finding teachers:", error);
+                showMessage("Failed to find available teachers. Please try again.", "error");
+            }
+        }
+
+        async function confirmAssignment(subject, day, period, startTime, room, endTime) {
+            const selectedTeacher = document.getElementById("assignDropdown").value;
+
+            if (!selectedTeacher) {
+                showMessage("Please select a teacher", "error");
+                return;
+            }
+
+            try {
+                const res = await fetch("/api/auth/assignlecture", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify({
+                        teacher: selectedTeacher,
+                        subject,
+                        room,
+                        day,
+                        period,
+                        startTime,
+                        endTime,
+                    }),
+                });
+
+                const result = await res.json();
+
+                if (res.ok) {
+                    showMessage(`✅ Lecture successfully assigned to ${selectedTeacher}!`, "success");
+                    document.getElementById("teacherLectureModal").style.display = "none";
+
+                    // Refresh the timetable and leave requests
+                    if (document.getElementById('timetable-section').classList.contains('active')) {
+                        renderTable();
+                    }
+                    loadLeaveRequests();
+                } else {
+                    showMessage("❌ Assignment failed: " + result.message, "error");
+                }
+            } catch (err) {
+                console.error("Assignment error:", err);
+                showMessage("❌ Error assigning lecture. Please try again.", "error");
+            }
+        }
+
+        function closeTeacherLectures() {
+            document.getElementById("teacherLectureModal").style.display = "none";
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function () {
+            // Update date and time
+            const updateDateTime = () => {
+                document.getElementById("date-time").textContent = new Date().toLocaleString();
+            };
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+
+            // Load initial data
+            loadDashboardStats();
+
+            // Logout functionality
+            document.getElementById('logoutBtn').addEventListener('click', async function () {
+                try {
+                    const response = await fetch('/api/auth/logout', {
+                        method: 'POST',
+                        credentials: 'include'
+                    });
+
+                    if (response.ok) {
+                        localStorage.removeItem('user');
+                        window.location.href = '/';
+                    }
+                } catch (error) {
+                    console.error('Logout error:', error);
+                    window.location.href = '/';
+                }
+            });
+
+            // Teacher filter change
+            document.getElementById("teacherFilter").addEventListener("change", renderTable);
+        });
+    </script>
+</body>
+
+</html> 
+   <style>
+      /* Enhanced Timetable Styles */
+      .timetable-wrapper {
+        overflow-x: auto;
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow-xl);
+      }
+
+      .timetable {
+        min-width: 1200px;
+        border: 1px solid var(--border-color);
+      }
+
+      .day-column {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+        color: white !important;
+        font-weight: 700 !important;
+        min-width: 120px;
+        position: sticky;
+        left: 0;
+        z-index: 10;
+      }
+
+      .period-column {
+        min-width: 140px;
+        background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+      }
+
+      .break-column {
+        background: linear-gradient(135deg, #fef3c7, #fde68a) !important;
+        color: #92400e !important;
+      }
+
+      .header-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+      }
+
+      .header-icon {
+        font-size: 1.25rem;
+      }
+
+      .period-number {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: var(--primary-color);
+      }
+
+      .period-time {
+        font-size: 0.75rem;
+        opacity: 0.8;
+      }
+
+      .break-text {
+        font-size: 0.875rem;
+        font-weight: 700;
+        color: #92400e;
+      }
+
+      .timetable td:first-child {
+        background: var(--bg-tertiary) !important;
+        font-weight: 600 !important;
+        text-transform: capitalize !important;
+        position: sticky;
+        left: 0;
+        z-index: 5;
+      }
+
+      .lecture-cell {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.15)) !important;
+        border: 2px solid var(--primary-color) !important;
+        border-radius: var(--radius-md) !important;
+        font-weight: 600;
+        position: relative;
+      }
+
+      .lecture-cell::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      }
+
+      .lecture-subject {
+        font-size: 0.875rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 0.25rem;
+      }
+
+      .lecture-room {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        margin-bottom: 0.25rem;
+      }
+
+      .lecture-time {
+        font-size: 0.625rem;
+        color: var(--text-secondary);
+        font-weight: 500;
+      }
+
+      .empty-cell {
+        color: var(--text-secondary);
+        font-size: 1.5rem;
+        opacity: 0.3;
+      }
+
+      .lunch-cell {
+        background: linear-gradient(135deg, #fef3c7, #fde68a) !important;
+        color: #92400e !important;
+        font-weight: 600;
+        font-size: 0.875rem;
+      }
+
+      .timetable tbody tr:hover {
+        background: rgba(99, 102, 241, 0.02);
+        box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1);
+      }
+
+      .timetable td:hover:not(:first-child) {
+        transform: scale(1.02);
+        box-shadow: var(--shadow-md);
+      }
+
+      .lecture-cell:hover {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(139, 92, 246, 0.25)) !important;
+        transform: scale(1.05) !important;
+        box-shadow: var(--shadow-lg) !important;
+      }
+    </style>
